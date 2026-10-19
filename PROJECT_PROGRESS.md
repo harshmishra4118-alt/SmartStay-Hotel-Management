@@ -136,3 +136,23 @@ The following discrepancies between JSP Expression Language references and model
 - **WAR Package**: `target/smart-hotel-management.war` (8.39 MB, verified built from latest source).
 - **Environment Status**: Live database and servlet container execution pending local MySQL 8.x and Tomcat 10.1 service startup by the operator. All configuration files, database scripts, and deployment artifacts are ready.
 
+---
+
+## 8. Database Export Procedure (mysqldump & MySQL Workbench)
+
+To generate a full database export for project delivery or evaluation:
+
+### Option A: Command Line (`mysqldump`)
+```powershell
+mysqldump -u root -p --databases smart_hotel_management --routines --triggers --single-transaction > "database\smart_hotel_management_export.sql"
+```
+
+### Option B: MySQL Workbench GUI
+1. Open MySQL Workbench &rarr; connect to the local server.
+2. Go to **Server** &rarr; **Data Export**.
+3. Select schema `smart_hotel_management`.
+4. Choose **Dump Structure and Data**.
+5. Select **Export to Self-Contained File** (`database/smart_hotel_management_export.sql`).
+6. Click **Start Export**.
+
+

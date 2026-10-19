@@ -90,14 +90,36 @@ mysql -u root -p smart_hotel_management < "database\seed.sql"
 ### Step 2: Configure Database Credentials
 Verify that `src/main/resources/db.properties` has your local MySQL username and password:
 ```properties
+db.driver=com.mysql.cj.jdbc.Driver
 db.url=jdbc:mysql://localhost:3306/smart_hotel_management?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
 db.username=root
 db.password=root
-db.pool.maximumPoolSize=10
+db.pool.maximumPoolSize=15
 db.pool.minimumIdle=3
-db.pool.idleTimeout=300000
-db.pool.connectionTimeout=20000
-db.pool.maxLifetime=1200000
+db.pool.idleTimeoutMs=300000
+db.pool.connectionTimeoutMs=20000
+db.pool.maxLifetimeMs=1800000
+```
+
+### Step 3: MySQL Database Export Procedure (`mysqldump`)
+To create a live snapshot export of the database structure and data:
+
+**Using Command Prompt or PowerShell:**
+```powershell
+mysqldump -u root -p --databases smart_hotel_management --routines --triggers --single-transaction > "database\smart_hotel_management_export.sql"
+```
+
+**Using MySQL Workbench GUI:**
+1. Open MySQL Workbench and connect to your local MySQL instance.
+2. From the top navigation menu, choose **Server** &rarr; **Data Export**.
+3. In the left panel, select `smart_hotel_management`.
+4. Choose **Dump Structure and Data**.
+5. Under **Export Options**, select **Export to Self-Contained File** and set the path (e.g. `database/smart_hotel_management_export.sql`).
+6. Click **Start Export**.
+
+To import or restore the export file later:
+```powershell
+mysql -u root -p < "database\smart_hotel_management_export.sql"
 ```
 
 ---
