@@ -8,7 +8,7 @@ public class PasswordUtilTest {
 
     @Test
     public void testPasswordHashingAndVerification() {
-        String plain = "Admin@123";
+        String plain = "TestSecret#2026";
         String hashed = PasswordUtil.hashPassword(plain);
 
         assertNotNull(hashed);

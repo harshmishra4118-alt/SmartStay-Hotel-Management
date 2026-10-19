@@ -76,7 +76,7 @@
                                     </td>
                                     <td>Floor ${r.floorNumber}</td>
                                     <td>
-                                        <span class="badge ${r.operationalStatus.name() == 'AVAILABLE' ? 'bg-success' : (r.operationalStatus.name() == 'OCCUPIED' ? 'bg-primary' : 'bg-warning text-dark')}">
+                                        <span class="badge ${r.operationalStatus.name() == 'ACTIVE' ? 'bg-success' : (r.operationalStatus.name() == 'INACTIVE' ? 'bg-secondary' : 'bg-warning text-dark')}">
                                             ${r.operationalStatus.displayName}
                                         </span>
                                     </td>

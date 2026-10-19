@@ -33,16 +33,16 @@
                         <div class="d-flex w-100 justify-content-between align-items-center mb-1">
                             <div class="d-flex align-items-center gap-2">
                                 <c:choose>
-                                    <c:when test="${n.type.name() == 'BOOKING_CONFIRMATION'}">
-                                        <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check-circle me-1"></i>Booking Confirmed</span>
+                                    <c:when test="${n.type.name() == 'BOOKING'}">
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check-circle me-1"></i>Booking Alert</span>
                                     </c:when>
-                                    <c:when test="${n.type.name() == 'PAYMENT_RECEIVED'}">
+                                    <c:when test="${n.type.name() == 'PAYMENT'}">
                                         <span class="badge bg-primary-subtle text-primary border border-primary-subtle"><i class="bi bi-credit-card me-1"></i>Payment Received</span>
                                     </c:when>
-                                    <c:when test="${n.type.name() == 'CHECK_IN_REMINDER'}">
-                                        <span class="badge bg-warning-subtle text-warning border border-warning-subtle"><i class="bi bi-calendar-event me-1"></i>Check-In Reminder</span>
+                                    <c:when test="${n.type.name() == 'CHECKIN'}">
+                                        <span class="badge bg-warning-subtle text-warning border border-warning-subtle"><i class="bi bi-calendar-event me-1"></i>Check-In Notice</span>
                                     </c:when>
-                                    <c:when test="${n.type.name() == 'CHECK_OUT_REMINDER'}">
+                                    <c:when test="${n.type.name() == 'CHECKOUT'}">
                                         <span class="badge bg-info-subtle text-info border border-info-subtle"><i class="bi bi-box-arrow-right me-1"></i>Check-Out Notice</span>
                                     </c:when>
                                     <c:otherwise>

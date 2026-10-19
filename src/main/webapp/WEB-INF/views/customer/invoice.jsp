@@ -65,7 +65,7 @@
                         <c:when test="${invoice.paymentStatus.name() == 'PAID'}">
                             <span class="badge badge-paid fs-6"><i class="bi bi-check-circle me-1"></i>PAID IN FULL</span>
                         </c:when>
-                        <c:when test="${invoice.paymentStatus.name() == 'PARTIALLY_PAID'}">
+                        <c:when test="${invoice.paymentStatus.name() == 'PARTIAL'}">
                             <span class="badge badge-pending fs-6"><i class="bi bi-pie-chart me-1"></i>PARTIAL PAYMENT</span>
                         </c:when>
                         <c:otherwise>

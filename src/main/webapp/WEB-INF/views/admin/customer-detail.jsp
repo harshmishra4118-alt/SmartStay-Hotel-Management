@@ -84,8 +84,8 @@
                         <label class="form-label small fw-bold text-navy text-uppercase mb-0">Modify Account Status:</label>
                         <select name="status" class="form-select form-select-sm" style="width: 150px;">
                             <option value="ACTIVE" ${customerUser.status.name() == 'ACTIVE' ? 'selected' : ''}>ACTIVE</option>
+                            <option value="INACTIVE" ${customerUser.status.name() == 'INACTIVE' ? 'selected' : ''}>INACTIVE</option>
                             <option value="SUSPENDED" ${customerUser.status.name() == 'SUSPENDED' ? 'selected' : ''}>SUSPENDED</option>
-                            <option value="DELETED" ${customerUser.status.name() == 'DELETED' ? 'selected' : ''}>DELETED</option>
                         </select>
                         <button type="submit" class="btn btn-navy btn-sm fw-bold">Update Account</button>
                     </form>

@@ -84,6 +84,7 @@ public class Payment implements Serializable {
 
     public RecordStatus getPaymentStatus() { return paymentStatus; }
     public void setPaymentStatus(RecordStatus paymentStatus) { this.paymentStatus = paymentStatus; }
+    public RecordStatus getStatus() { return paymentStatus; }
 
     public String getTransactionNotes() { return transactionNotes; }
     public void setTransactionNotes(String transactionNotes) { this.transactionNotes = transactionNotes; }

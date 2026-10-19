@@ -58,21 +58,28 @@
                     <a href="${pageContext.request.contextPath}/register" class="text-gold fw-bold text-decoration-none">Create Guest Account</a>
                 </div>
 
-                <!-- Academic Demo Accounts Quick Helper -->
+                <!-- Seeded Demo Accounts Quick Helper -->
                 <div class="mt-4 p-3 bg-light rounded border text-start">
-                    <span class="badge bg-navy text-gold mb-2 text-uppercase" style="font-size: 0.65rem;">Demo Credentials</span>
+                    <span class="badge bg-navy text-gold mb-2 text-uppercase" style="font-size: 0.65rem;">Seeded Role Accounts</span>
                     <div class="d-flex flex-column gap-1 small text-muted" style="font-size: 0.75rem;">
                         <div>
-                            <strong>Admin:</strong> 
-                            <a href="javascript:void(0)" onclick="fillCreds('admin@aurastay.com', 'Admin@123')" class="text-primary text-decoration-none">admin@aurastay.com</a> / <code>Admin@123</code>
+                            <strong>Administrator:</strong> 
+                            <a href="javascript:void(0)" onclick="fillAccount('admin@aurastay.com')" class="text-primary text-decoration-none">admin@aurastay.com</a>
                         </div>
                         <div>
-                            <strong>Staff:</strong> 
-                            <a href="javascript:void(0)" onclick="fillCreds('frontdesk@aurastay.com', 'Staff@123')" class="text-primary text-decoration-none">frontdesk@aurastay.com</a> / <code>Staff@123</code>
+                            <strong>Front Desk Staff:</strong> 
+                            <a href="javascript:void(0)" onclick="fillAccount('frontdesk@aurastay.com')" class="text-primary text-decoration-none">frontdesk@aurastay.com</a>
                         </div>
                         <div>
-                            <strong>Customer:</strong> 
-                            <a href="javascript:void(0)" onclick="fillCreds('john.doe@example.com', 'Customer@123')" class="text-primary text-decoration-none">john.doe@example.com</a> / <code>Customer@123</code>
+                            <strong>Housekeeping Staff:</strong> 
+                            <a href="javascript:void(0)" onclick="fillAccount('housekeeping@aurastay.com')" class="text-primary text-decoration-none">housekeeping@aurastay.com</a>
+                        </div>
+                        <div>
+                            <strong>Customer / Guest:</strong> 
+                            <a href="javascript:void(0)" onclick="fillAccount('john.doe@example.com')" class="text-primary text-decoration-none">john.doe@example.com</a>
+                        </div>
+                        <div class="text-muted fst-italic mt-1" style="font-size: 0.7rem;">
+                            Click email to pre-fill. Passwords are securely hashed with BCrypt ($2a$12$).
                         </div>
                     </div>
                 </div>
@@ -82,9 +89,15 @@
 </div>
 
 <script>
-    function fillCreds(email, pass) {
-        document.getElementById('loginEmail').value = email;
-        document.getElementById('loginPassword').value = pass;
+    function fillAccount(email) {
+        var emailInput = document.getElementById('loginEmail');
+        var passInput = document.getElementById('loginPassword');
+        if (emailInput) {
+            emailInput.value = email;
+            if (passInput) {
+                passInput.focus();
+            }
+        }
     }
 </script>
 

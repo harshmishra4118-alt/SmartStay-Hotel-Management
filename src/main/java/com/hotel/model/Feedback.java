@@ -82,6 +82,7 @@ public class Feedback implements Serializable {
 
     public SentimentLabel getSentimentLabel() { return sentimentLabel; }
     public void setSentimentLabel(SentimentLabel sentimentLabel) { this.sentimentLabel = sentimentLabel; }
+    public SentimentLabel getSentiment() { return sentimentLabel; }
 
     public String getRuleKeywordsMatched() { return ruleKeywordsMatched; }
     public void setRuleKeywordsMatched(String ruleKeywordsMatched) { this.ruleKeywordsMatched = ruleKeywordsMatched; }
@@ -97,6 +98,7 @@ public class Feedback implements Serializable {
 
     public String getCustomerName() { return customerName; }
     public void setCustomerName(String customerName) { this.customerName = customerName; }
+    public String getUserFullName() { return customerName != null ? customerName : "Valued Guest"; }
 
     public String getCustomerEmail() { return customerEmail; }
     public void setCustomerEmail(String customerEmail) { this.customerEmail = customerEmail; }

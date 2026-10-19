@@ -1,12 +1,14 @@
 -- =====================================================================
 -- SMART HOTEL MANAGEMENT SYSTEM (AuraStay Luxury Suites)
 -- Seed Data: database/seed.sql
--- Default accounts:
--- 1. Admin: admin@aurastay.com / Admin@123
--- 2. Staff: frontdesk@aurastay.com / Staff@123
--- 3. Staff: housekeeping@aurastay.com / Staff@123
--- 4. Customer: john.doe@example.com / Customer@123
--- 5. Customer: sophia.miller@example.com / Customer@123
+-- Default accounts (seeded with 12-round BCrypt hashes):
+-- 1. Admin: admin@aurastay.com
+-- 2. Staff (Front Desk): frontdesk@aurastay.com
+-- 3. Staff (Housekeeping): housekeeping@aurastay.com
+-- 4. Customer: john.doe@example.com
+-- 5. Customer: sophia.miller@example.com
+-- Note: All account passwords are encrypted using BCrypt ($2a$12$).
+-- Administrators may generate custom hashes using PasswordUtil or reset passwords via the user management console.
 -- =====================================================================
 
 USE smart_hotel_management;
@@ -30,19 +32,14 @@ TRUNCATE TABLE application_settings;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- ---------------------------------------------------------------------
--- 1. Users
--- Pre-hashed BCrypt passwords:
--- Admin@123    -> $2a$12$Z6zEwYjW.oZpE61ZkJ8HXeFhL0cT1O3bHnZ3W8M2vK1nI4pL7hN2G
--- Staff@123    -> $2a$12$Z6zEwYjW.oZpE61ZkJ8HXeFhL0cT1O3bHnZ3W8M2vK1nI4pL7hN2G
--- Customer@123 -> $2a$12$Z6zEwYjW.oZpE61ZkJ8HXeFhL0cT1O3bHnZ3W8M2vK1nI4pL7hN2G
--- Note: A fallback test in PasswordUtil verifies these hashes or any valid bcrypt hash.
+-- 1. Users (BCrypt 12-round secure hashes)
 -- ---------------------------------------------------------------------
 INSERT INTO users (id, email, password_hash, role, full_name, phone, status, created_at) VALUES
-(1, 'admin@aurastay.com', '$2a$10$wK1B4x3rUjK6.Y9YQf1a7eK3N9oT9O4K8Z2X6y1w7z3Q1a2b3c4de', 'ADMIN', 'Victoria Sterling (General Manager)', '+91 98765 43210', 'ACTIVE', NOW()),
-(2, 'frontdesk@aurastay.com', '$2a$10$wK1B4x3rUjK6.Y9YQf1a7eK3N9oT9O4K8Z2X6y1w7z3Q1a2b3c4de', 'STAFF', 'Marcus Vance (Front Desk Executive)', '+91 98765 43211', 'ACTIVE', NOW()),
-(3, 'housekeeping@aurastay.com', '$2a$10$wK1B4x3rUjK6.Y9YQf1a7eK3N9oT9O4K8Z2X6y1w7z3Q1a2b3c4de', 'STAFF', 'Elena Rostova (Executive Housekeeper)', '+91 98765 43212', 'ACTIVE', NOW()),
-(4, 'john.doe@example.com', '$2a$10$wK1B4x3rUjK6.Y9YQf1a7eK3N9oT9O4K8Z2X6y1w7z3Q1a2b3c4de', 'CUSTOMER', 'Johnathan Doe', '+91 91234 56789', 'ACTIVE', NOW()),
-(5, 'sophia.miller@example.com', '$2a$10$wK1B4x3rUjK6.Y9YQf1a7eK3N9oT9O4K8Z2X6y1w7z3Q1a2b3c4de', 'CUSTOMER', 'Sophia Miller', '+91 98989 12345', 'ACTIVE', NOW());
+(1, 'admin@aurastay.com', '$2a$12$3D3X21uIv8aDuFFIYWG46uAB6qprjRO/meeVLaDvHvi8r5Kao8Rci', 'ADMIN', 'Victoria Sterling (General Manager)', '+91 98765 43210', 'ACTIVE', NOW()),
+(2, 'frontdesk@aurastay.com', '$2a$12$mK3TTPGnxtbpoSmZAwdaNeBOHJSkGrQ9aM1Rmiieicqjsf90kI.tW', 'STAFF', 'Marcus Vance (Front Desk Executive)', '+91 98765 43211', 'ACTIVE', NOW()),
+(3, 'housekeeping@aurastay.com', '$2a$12$mK3TTPGnxtbpoSmZAwdaNeBOHJSkGrQ9aM1Rmiieicqjsf90kI.tW', 'STAFF', 'Elena Rostova (Executive Housekeeper)', '+91 98765 43212', 'ACTIVE', NOW()),
+(4, 'john.doe@example.com', '$2a$12$qorsj67ykvbo8O..gE1UM.4.3npHQLNJQe4hsjKqxgCSSu1hoaGWu', 'CUSTOMER', 'Johnathan Doe', '+91 91234 56789', 'ACTIVE', NOW()),
+(5, 'sophia.miller@example.com', '$2a$12$qorsj67ykvbo8O..gE1UM.4.3npHQLNJQe4hsjKqxgCSSu1hoaGWu', 'CUSTOMER', 'Sophia Miller', '+91 98989 12345', 'ACTIVE', NOW());
 
 -- ---------------------------------------------------------------------
 -- 2. Customer Profiles

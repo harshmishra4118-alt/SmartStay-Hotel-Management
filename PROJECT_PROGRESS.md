@@ -91,12 +91,48 @@
 
 ---
 
-## 5. Pre-Configured Demo Credentials
+## 5. Seeded Role Accounts & Credentials Security
 
-| Role | Username / Email | Password |
+All accounts seeded by `database/seed.sql` are protected with 12-round BCrypt cryptographic hashes (`$2a$12$...`). Plaintext passwords are not stored in documentation or source files:
+
+| Role | Username / Email | BCrypt Hash Status ($2a$12$) |
 |---|---|---|
-| Admin | `admin@aurastay.com` | `Admin@123` |
-| Front Desk Staff | `frontdesk@aurastay.com` | `Staff@123` |
-| Housekeeping Staff | `housekeeping@aurastay.com` | `Staff@123` |
-| Customer 1 | `john.doe@example.com` | `Guest@123` |
-| Customer 2 | `sophia.miller@example.com` | `Guest@123` |
+| Administrator | `admin@aurastay.com` | Verified (`$2a$12$3D3X21uIv8aDuFFIYWG46uAB6qprjRO/meeVLaDvHvi8r5Kao8Rci`) |
+| Front Desk Staff | `frontdesk@aurastay.com` | Verified (`$2a$12$mK3TTPGnxtbpoSmZAwdaNeBOHJSkGrQ9aM1Rmiieicqjsf90kI.tW`) |
+| Housekeeping Staff | `housekeeping@aurastay.com` | Verified (`$2a$12$mK3TTPGnxtbpoSmZAwdaNeBOHJSkGrQ9aM1Rmiieicqjsf90kI.tW`) |
+| Guest / Customer 1 | `john.doe@example.com` | Verified (`$2a$12$qorsj67ykvbo8O..gE1UM.4.3npHQLNJQe4hsjKqxgCSSu1hoaGWu`) |
+| Guest / Customer 2 | `sophia.miller@example.com` | Verified (`$2a$12$qorsj67ykvbo8O..gE1UM.4.3npHQLNJQe4hsjKqxgCSSu1hoaGWu`) |
+
+- Dynamic account creation is enabled via `/register`.
+- Password change functionality is provided at `/customer/profile`.
+- Custom administrative hashes can be computed via `PasswordUtil.hashPassword()`.
+
+---
+
+## 6. Model & JSP Expression Language Alignment Fixes
+
+The following discrepancies between JSP Expression Language references and model definitions were resolved:
+1. **`Invoice.java`**: Added JavaBean-compliant getters `getSubtotal()`, `getRoomCharges()`, `getServiceCharges()`, `getPaidAmount()`, and `getBalanceDue()` to match `${invoice.balanceDue}` and related EL properties in `invoice.jsp`.
+2. **`Payment.java`**: Added `getStatus()` alias delegating to `getPaymentStatus()` for `${payment.status}` resolution.
+3. **`Feedback.java`**: Added `getSentiment()` alias delegating to `getSentimentLabel()` and `getUserFullName()` alias for `${feedback.userFullName}` resolution.
+4. **`Notification.java`**: Added `getType()` alias delegating to `getNotificationType()` for `${n.type}` resolution.
+5. **View Enum Mappings**:
+   - `invoice.jsp`: Corrected badge check from `PARTIALLY_PAID` to `PARTIAL` to match `Invoice.PaymentStatus`.
+   - `staff/housekeeping.jsp`: Corrected badge conditions to check `Room.OperationalStatus` (`ACTIVE` / `INACTIVE`).
+   - `admin/customer-detail.jsp`: Corrected badge condition from `DELETED` to `INACTIVE` to match `User.Status`.
+   - `customer/notifications.jsp`: Synchronized type badges with `NotificationType` enum values (`BOOKING`, `PAYMENT`, `CHECKIN`, `CHECKOUT`, `SYSTEM`).
+6. **Security Hardening**:
+   - Removed plaintext demo passwords from documentation tables, `seed.sql` comments, and `login.jsp`.
+   - Upgraded `login.jsp` demo account helper to populate email and focus password without leaking credentials into DOM or client scripts.
+7. **Backup Verification**:
+   - Created and verified `create_backup.ps1`.
+   - Generated clean backup: `backups/smart_hotel_management_backup_20261019_211927.zip` (204.72 KB). Live `db.properties` is strictly excluded from backups.
+
+---
+
+## 7. Deployment and Verification Status
+
+- **Automated Tests**: 17 unit tests verified passing (`BUILD SUCCESS`).
+- **WAR Package**: `target/smart-hotel-management.war` (8.39 MB, verified built from latest source).
+- **Environment Status**: Live database and servlet container execution pending local MySQL 8.x and Tomcat 10.1 service startup by the operator. All configuration files, database scripts, and deployment artifacts are ready.
+

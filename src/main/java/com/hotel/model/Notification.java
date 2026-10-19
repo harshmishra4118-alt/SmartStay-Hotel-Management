@@ -62,6 +62,7 @@ public class Notification implements Serializable {
 
     public NotificationType getNotificationType() { return notificationType; }
     public void setNotificationType(NotificationType notificationType) { this.notificationType = notificationType; }
+    public NotificationType getType() { return notificationType; }
 
     public boolean isRead() { return isRead; }
     public void setRead(boolean read) { isRead = read; }

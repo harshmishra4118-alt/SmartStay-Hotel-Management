@@ -107,4 +107,29 @@ public class Invoice implements Serializable {
 
     public String getRoomNumber() { return roomNumber; }
     public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
+
+    // EL Compatibility Helpers
+    private BigDecimal paidAmount = BigDecimal.ZERO;
+    private BigDecimal balanceDue = BigDecimal.ZERO;
+
+    public BigDecimal getSubtotal() { return subtotalAmount; }
+    public BigDecimal getRoomCharges() { return subtotalAmount; }
+    public BigDecimal getServiceCharges() { return BigDecimal.ZERO; }
+    public BigDecimal getPaidAmount() { 
+        if (paymentStatus == PaymentStatus.PAID) {
+            return totalPayable != null ? totalPayable : BigDecimal.ZERO;
+        }
+        return paidAmount != null ? paidAmount : BigDecimal.ZERO; 
+    }
+    public void setPaidAmount(BigDecimal paidAmount) { this.paidAmount = paidAmount; }
+    public BigDecimal getBalanceDue() { 
+        if (paymentStatus == PaymentStatus.PAID) {
+            return BigDecimal.ZERO;
+        }
+        BigDecimal total = totalPayable != null ? totalPayable : BigDecimal.ZERO;
+        BigDecimal paid = getPaidAmount();
+        BigDecimal due = total.subtract(paid);
+        return due.compareTo(BigDecimal.ZERO) > 0 ? due : BigDecimal.ZERO;
+    }
+    public void setBalanceDue(BigDecimal balanceDue) { this.balanceDue = balanceDue; }
 }

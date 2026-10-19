@@ -102,17 +102,24 @@ db.pool.maxLifetime=1200000
 
 ---
 
-## 4. Pre-Configured Demo Accounts
+## 4. Pre-Configured Seed Accounts & Security
 
-All demo accounts are seeded with secure 12-round BCrypt hashed passwords:
+All accounts seeded by `database/seed.sql` are securely hashed using **12-round BCrypt** (`$2a$12$...`). In compliance with security best practices, plaintext passwords are not published in public documentation.
 
-| Role | Email Identifier | Password | Access Portal & Capabilities |
+| Role | Email Identifier | Password Hash Status | Access Portal & Capabilities |
 |---|---|---|---|
-| **Administrator** | `admin@aurastay.com` | `Admin@123` | Executive Dashboard, Inventory CRUD, Master Bookings, User Directory, Staff Roster, Feedback Moderation, Financial Analytics & CSV, Audit Trail |
-| **Front Desk Staff** | `frontdesk@aurastay.com` | `Staff@123` | Front Desk Terminal, Express Check-In, Express Check-Out, Housekeeping Board, Reservations Lookup |
-| **Housekeeping Staff** | `housekeeping@aurastay.com` | `Staff@123` | Housekeeping Room Status Updates (Clean, Dirty, Inspecting, Out of Service) |
-| **Guest / Customer 1** | `john.doe@example.com` | `Guest@123` | Search & Book Rooms, My Bookings, Printable Tax Invoices, Demo Payment Simulator, Verified Reviews, Profile & Preferences |
-| **Guest / Customer 2** | `sophia.miller@example.com` | `Guest@123` | Room Recommendations, Reservation Vouchers, Notifications, Password Change |
+| **Administrator** | `admin@aurastay.com` | `$2a$12$3D3X21uIv8aDuFFIYWG46uAB6qprjRO/meeVLaDvHvi8r5Kao8Rci` | Executive Dashboard, Inventory CRUD, Master Bookings, User Directory, Staff Roster, Feedback Moderation, Financial Analytics & CSV, Audit Trail |
+| **Front Desk Staff** | `frontdesk@aurastay.com` | `$2a$12$mK3TTPGnxtbpoSmZAwdaNeBOHJSkGrQ9aM1Rmiieicqjsf90kI.tW` | Front Desk Terminal, Express Check-In, Express Check-Out, Housekeeping Board, Reservations Lookup |
+| **Housekeeping Staff** | `housekeeping@aurastay.com` | `$2a$12$mK3TTPGnxtbpoSmZAwdaNeBOHJSkGrQ9aM1Rmiieicqjsf90kI.tW` | Housekeeping Room Status Updates (Clean, Dirty, Inspecting, Out of Service) |
+| **Guest / Customer 1** | `john.doe@example.com` | `$2a$12$qorsj67ykvbo8O..gE1UM.4.3npHQLNJQe4hsjKqxgCSSu1hoaGWu` | Search & Book Rooms, My Bookings, Printable Tax Invoices, Demo Payment Simulator, Verified Reviews, Profile & Preferences |
+| **Guest / Customer 2** | `sophia.miller@example.com` | `$2a$12$qorsj67ykvbo8O..gE1UM.4.3npHQLNJQe4hsjKqxgCSSu1hoaGWu` | Room Recommendations, Reservation Vouchers, Notifications, Password Change |
+
+> [!NOTE]
+> **Password Management & Customization**:
+> - New accounts can be registered at `/register`.
+> - Logged-in users can update their password under their profile management page.
+> - To generate a new BCrypt hash for custom administrative credentials, invoke `PasswordUtil.hashPassword("YourStrongPassword")` or use standard BCrypt tooling (cost factor 12).
+> - Default seeds can be customized directly in `database/seed.sql` prior to running the script in MySQL Workbench.
 
 *Self-registration is also available directly on the website via `/register`.*
 
