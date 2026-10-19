@@ -169,21 +169,53 @@ target/smart-hotel-management.war
 
 ## 6. Deployment Guide
 
+### Verified Local Environment Paths
+- **Java Runtime**: Oracle JDK 21.0.10 LTS (`C:\Program Files\Java\jdk-21.0.10`)
+- **Maven**: Apache Maven 3.10.0 (`C:\apache-maven-3.10.0`)
+- **Tomcat**: Apache Tomcat 10.1.59 (`C:\apache-tomcat-10.1.59`)
+- **Tomcat HTTP Port**: `8080` (configured in `C:\apache-tomcat-10.1.59\conf\server.xml`)
+- **MySQL Server 8.0**: Running on port `3306` (`C:\Program Files\MySQL\MySQL Server 8.0`)
+- **MySQL Workbench 8.0**: Installed at `C:\Program Files\MySQL\MySQL Workbench 8.0`
+- **Application Context Path**: `/smart-hotel-management`
+- **Exact Application URL**: `http://localhost:8080/smart-hotel-management`
+
+---
+
 ### Option A: Standalone Apache Tomcat 10.1
-1. Verify Tomcat 10.1 is installed (e.g. at `C:\apache-tomcat-10.1.59`).
-2. Copy `target/smart-hotel-management.war` into your Tomcat `webapps/` folder:
-   ```powershell
-   Copy-Item "target\smart-hotel-management.war" -Destination "C:\apache-tomcat-10.1.59\webapps\ROOT.war"
+1. **Configure Database Credentials**:
+   Ensure `src/main/resources/db.properties` contains your local MySQL root password:
+   ```properties
+   db.url=jdbc:mysql://localhost:3306/smart_hotel_management?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
+   db.username=root
+   db.password=YOUR_LOCAL_MYSQL_PASSWORD
    ```
-   *(Renaming to `ROOT.war` serves the application directly at `http://localhost:8080/`, or keep it as `smart-hotel-management.war` to serve at `http://localhost:8080/smart-hotel-management`).*
-3. Start Tomcat:
+2. **Execute Database Scripts in MySQL Workbench**:
+   - Open MySQL Workbench &rarr; connect to local MySQL (port 3306).
+   - Execute `database/schema.sql` (creates schema and 12 normalized tables).
+   - Execute `database/seed.sql` (populates rooms, bookings, and BCrypt-hashed role accounts).
+3. **Build the WAR Package**:
+   ```powershell
+   & "C:\apache-maven-3.10.0\bin\mvn.cmd" clean package -DskipTests
+   ```
+4. **Deploy to Tomcat Webapps**:
+   ```powershell
+   Copy-Item "target\smart-hotel-management.war" -Destination "C:\apache-tomcat-10.1.59\webapps\smart-hotel-management.war"
+   ```
+   *(Note: The WAR has already been copied to `C:\apache-tomcat-10.1.59\webapps\smart-hotel-management.war`).*
+5. **Start Tomcat**:
    ```powershell
    & "C:\apache-tomcat-10.1.59\bin\startup.bat"
    ```
-4. Access the portal in your browser:
+6. **Open in Browser**:
    ```text
-   http://localhost:8080/
+   http://localhost:8080/smart-hotel-management
    ```
+7. **Stop Tomcat**:
+   ```powershell
+   & "C:\apache-tomcat-10.1.59\bin\shutdown.bat"
+   ```
+
+---
 
 ### Option B: Eclipse IDE Deployment
 1. Open **Eclipse IDE for Enterprise Java and Web Developers**.
@@ -193,6 +225,7 @@ target/smart-hotel-management.war
 5. In the **Servers** tab, click **New &rarr; Server &rarr; Apache &rarr; Tomcat v10.1 Server**.
 6. Set the Tomcat installation path to `C:\apache-tomcat-10.1.59` and ensure JRE is set to Java 17 or higher.
 7. Right-click the project &rarr; **Run As &rarr; Run on Server**.
+8. Access at `http://localhost:8080/smart-hotel-management`.
 
 ---
 

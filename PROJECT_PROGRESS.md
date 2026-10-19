@@ -134,7 +134,22 @@ The following discrepancies between JSP Expression Language references and model
 
 - **Automated Tests**: 17 unit tests verified passing (`BUILD SUCCESS`).
 - **WAR Package**: `target/smart-hotel-management.war` (8.39 MB, verified built from latest source).
-- **Environment Status**: Live database and servlet container execution pending local MySQL 8.x and Tomcat 10.1 service startup by the operator. All configuration files, database scripts, and deployment artifacts are ready.
+- **Verified Local Environment**:
+  - **Java**: Oracle JDK 21.0.10 LTS (`C:\Program Files\Java\jdk-21.0.10`)
+  - **Maven**: Apache Maven 3.10.0 (`C:\apache-maven-3.10.0`)
+  - **Tomcat**: Apache Tomcat 10.1.59 (`C:\apache-tomcat-10.1.59`) verified present on disk.
+  - **Tomcat Connector Port**: `8080` (verified from `C:\apache-tomcat-10.1.59\conf\server.xml`).
+  - **WAR Staged**: Verified deployed to `C:\apache-tomcat-10.1.59\webapps\smart-hotel-management.war` (8.39 MB, non-destructive).
+  - **Context Path**: `/smart-hotel-management`
+  - **Exact Application URL**: `http://localhost:8080/smart-hotel-management`
+  - **MySQL Server 8.0**: Verified active and listening on port `3306` (`C:\Program Files\MySQL\MySQL Server 8.0`).
+  - **MySQL Workbench 8.0**: Verified installed at `C:\Program Files\MySQL\MySQL Workbench 8.0`.
+- **Database Connectivity Diagnostic**:
+  - A test query to port 3306 confirmed MySQL Server is actively listening.
+  - The local database password must be configured in `src/main/resources/db.properties` and the schema seeded via MySQL Workbench prior to starting Tomcat.
+- **Untested Status Reporting**:
+  - Offline automated tests (validation, pricing, BCrypt, rule-based chatbot, sentiment classifier) are 100% verified passing.
+  - Live interactive browser transactions (end-to-end check-in, payment demo, booking checkout) remain untested until the user completes the local MySQL credential step and launches Tomcat.
 
 ---
 
