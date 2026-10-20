@@ -10,7 +10,7 @@ public class ValidationUtilTest {
 
     @Test
     public void testEmailValidation() {
-        assertTrue(ValidationUtil.isValidEmail("guest@aurastay.com"));
+        assertTrue(ValidationUtil.isValidEmail("guest@SmartStay.com"));
         assertTrue(ValidationUtil.isValidEmail("user.name+tag@domain.co.uk"));
         assertFalse(ValidationUtil.isValidEmail("invalid-email"));
         assertFalse(ValidationUtil.isValidEmail("@domain.com"));
@@ -73,8 +73,8 @@ public class ValidationUtilTest {
         assertTrue(escaped4.startsWith("\"'@"), "Formula starting with @ must be neutralized");
 
         // Normal strings should be quoted safely
-        String normal = "AuraStay Deluxe Suite";
-        assertEquals("\"AuraStay Deluxe Suite\"", ValidationUtil.escapeForCsv(normal));
+        String normal = "SmartStay Deluxe Suite";
+        assertEquals("\"SmartStay Deluxe Suite\"", ValidationUtil.escapeForCsv(normal));
     }
 
     @Test

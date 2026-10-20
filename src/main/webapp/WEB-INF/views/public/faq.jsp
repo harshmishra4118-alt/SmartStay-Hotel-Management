@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-    <jsp:param name="pageTitle" value="Frequently Asked Questions - AuraStay"/>
+    <jsp:param name="pageTitle" value="Frequently Asked Questions - SmartStay"/>
 </jsp:include>
 <jsp:include page="/WEB-INF/views/common/navbar.jsp" />
 
@@ -44,7 +44,7 @@
             </h2>
             <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
                 <div class="accordion-body text-secondary small">
-                    Yes. All reservations made through the official AuraStay portal include complimentary gourmet breakfast at 
+                    Yes. All reservations made through the official SmartStay portal include complimentary gourmet breakfast at 
                     <em>The Gold Leaf</em> restaurant, served daily between 7:00 AM and 10:30 AM.
                 </div>
             </div>

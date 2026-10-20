@@ -1,6 +1,6 @@
 @echo off
 REM =====================================================================
-REM AuraStay Smart Hotel Management System - Tomcat 10.1 Launcher
+REM SmartStay Hotel Management System - Tomcat 10.1 Launcher
 REM =====================================================================
 set "JAVA_HOME=C:\Program Files\Java\jdk-21.0.10"
 set "JRE_HOME=C:\Program Files\Java\jdk-21.0.10"

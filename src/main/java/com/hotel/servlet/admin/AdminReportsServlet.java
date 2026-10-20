@@ -67,7 +67,7 @@ public class AdminReportsServlet extends HttpServlet {
             String csvContent = reportService.exportBookingsToCsv(bookings);
 
             resp.setContentType("text/csv; charset=UTF-8");
-            resp.setHeader("Content-Disposition", "attachment; filename=\"aurastay_bookings_" + LocalDate.now() + ".csv\"");
+            resp.setHeader("Content-Disposition", "attachment; filename=\"SmartStay_bookings_" + LocalDate.now() + ".csv\"");
             resp.getWriter().write(csvContent);
 
         } catch (Exception e) {

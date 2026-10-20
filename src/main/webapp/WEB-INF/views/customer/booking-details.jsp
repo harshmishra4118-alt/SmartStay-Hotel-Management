@@ -37,7 +37,7 @@
         <!-- Voucher Header -->
         <div class="d-flex justify-content-between align-items-start border-bottom pb-4 mb-4">
             <div>
-                <h3 class="font-serif text-navy mb-1"><i class="bi bi-gem text-gold me-2"></i>AuraStay Suites & Resort</h3>
+                <h3 class="font-serif text-navy mb-1"><i class="bi bi-gem text-gold me-2"></i>SmartStay Hotel</h3>
                 <p class="text-muted small mb-0">7 Royal Palms Boulevard, Marina Bay &bull; +91 (022) 8900 1200</p>
                 <small class="text-secondary">Official Guest Reservation Voucher</small>
             </div>
@@ -143,7 +143,7 @@
 
         <div class="text-muted small border-top pt-3">
             <p class="mb-1"><i class="bi bi-info-circle me-1"></i>Please present this voucher along with official government photo ID at the front desk upon check-in.</p>
-            <p class="mb-0">&copy; AuraStay Luxury Suites. Generated automatically on ${booking.createdAt}.</p>
+            <p class="mb-0">&copy; SmartStay Hotel. Generated automatically on ${booking.createdAt}.</p>
         </div>
     </div>
 </div>

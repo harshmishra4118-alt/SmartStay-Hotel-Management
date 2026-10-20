@@ -100,7 +100,7 @@ public class FaqChatbotService {
     public ChatResponse processQuery(String userMessage) {
         if (userMessage == null || userMessage.trim().isEmpty()) {
             return new ChatResponse(
-                    "Hello! I am AuraStay's Virtual Concierge. How may I assist your stay today?",
+                    "Hello! I am SmartStay's Virtual Concierge. How may I assist your stay today?",
                     "Greeting",
                     true,
                     getDefaultSuggestions()

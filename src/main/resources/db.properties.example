@@ -1,6 +1,6 @@
 # =====================================================================
 # Database Configuration Template
-# Smart Hotel Management System (AuraStay Luxury Suites)
+# Smart Hotel Management System (SmartStay Hotel)
 # =====================================================================
 # Copy this file to src/main/resources/db.properties or set environment variables:
 # DB_URL, DB_USER, DB_PASSWORD

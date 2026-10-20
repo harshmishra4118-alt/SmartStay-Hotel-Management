@@ -55,7 +55,7 @@ public class CheckInService {
 
         notificationDAO.create(new Notification(
                 booking.getUserId(),
-                "Welcome to AuraStay! Checked In to Room " + booking.getRoomNumber(),
+                "Welcome to SmartStay! Checked In to Room " + booking.getRoomNumber(),
                 "You have been successfully checked in to Room " + booking.getRoomNumber() + ". Enjoy your stay!",
                 Notification.NotificationType.CHECKIN,
                 "/customer/booking-details?ref=" + booking.getBookingReference()

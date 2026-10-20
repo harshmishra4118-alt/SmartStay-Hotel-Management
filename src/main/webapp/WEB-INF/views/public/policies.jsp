@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-    <jsp:param name="pageTitle" value="Hotel Policies & Terms - AuraStay Luxury Suites"/>
+    <jsp:param name="pageTitle" value="Hotel Policies & Terms - SmartStay Hotel"/>
 </jsp:include>
 <jsp:include page="/WEB-INF/views/common/navbar.jsp" />
 
@@ -53,7 +53,7 @@
     <div class="bg-white p-4 p-md-5 rounded-3 shadow-sm border mb-4" id="privacy">
         <h4 class="font-serif text-navy mb-3"><i class="bi bi-shield-lock-fill text-gold me-2"></i> 4. Privacy & Data Minimization</h4>
         <p class="text-secondary small leading-relaxed">
-            AuraStay adheres strictly to data minimization and secure storage practices:
+            SmartStay adheres strictly to data minimization and secure storage practices:
         </p>
         <ul class="text-secondary small">
             <li>User passwords are never stored in plaintext and are securely salted and hashed using cryptographic <strong>BCrypt (12 rounds)</strong>.</li>

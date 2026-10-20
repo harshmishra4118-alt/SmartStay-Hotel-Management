@@ -1,5 +1,5 @@
 /**
- * AuraStay Luxury Suites & Resort - Main JavaScript Suite
+ * SmartStay Hotel - Main JavaScript Suite
  * Rule-based FAQ Chatbot, Live Price Calculator, and Admin Charts
  */
 

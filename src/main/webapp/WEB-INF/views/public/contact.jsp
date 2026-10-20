@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-    <jsp:param name="pageTitle" value="Contact Concierge - AuraStay Luxury Suites"/>
+    <jsp:param name="pageTitle" value="Contact Concierge - SmartStay Hotel"/>
 </jsp:include>
 <jsp:include page="/WEB-INF/views/common/navbar.jsp" />
 
@@ -92,8 +92,8 @@
                         </div>
                         <div>
                             <h5 class="font-serif text-navy mb-1">Electronic Mail</h5>
-                            <p class="text-muted small mb-1">General: concierge@aurastay.com</p>
-                            <p class="text-muted small mb-0">Corporate Events: events@aurastay.com</p>
+                            <p class="text-muted small mb-1">General: concierge@SmartStay.com</p>
+                            <p class="text-muted small mb-0">Corporate Events: events@SmartStay.com</p>
                         </div>
                     </div>
                 </div>

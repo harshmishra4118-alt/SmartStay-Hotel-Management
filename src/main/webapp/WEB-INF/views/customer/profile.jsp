@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-    <jsp:param name="pageTitle" value="My Profile & Preferences - AuraStay Luxury Suites"/>
+    <jsp:param name="pageTitle" value="My Profile & Preferences - SmartStay Hotel"/>
 </jsp:include>
 <jsp:include page="/WEB-INF/views/common/navbar.jsp" />
 
@@ -146,7 +146,7 @@
             <!-- Account Summary Card -->
             <div class="card border-0 shadow-sm rounded-3 bg-light">
                 <div class="card-body p-4">
-                    <h6 class="font-serif text-navy fw-bold mb-3"><i class="bi bi-award text-gold me-2"></i>AuraStay Privilege Status</h6>
+                    <h6 class="font-serif text-navy fw-bold mb-3"><i class="bi bi-award text-gold me-2"></i>SmartStay Privilege Status</h6>
                     <div class="d-flex align-items-center gap-2 mb-2">
                         <span class="badge bg-navy text-gold px-3 py-2">VALUED GUEST</span>
                         <span class="badge bg-success">ACTIVE</span>

@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-    <jsp:param name="pageTitle" value="Guest Reviews & Sentiment Moderation - AuraStay Admin"/>
+    <jsp:param name="pageTitle" value="Guest Reviews & Sentiment Moderation - SmartStay Admin"/>
 </jsp:include>
 
 <div class="container-fluid p-0">
@@ -162,7 +162,7 @@
                                                 <p class="small text-muted mb-2 fst-italic">"${fb.comments}"</p>
                                                 <div class="mb-3">
                                                     <label class="form-label small fw-bold text-secondary text-uppercase">Your Public Response</label>
-                                                    <textarea name="reply" class="form-control" rows="4" placeholder="Dear ${fb.userFullName}, thank you for choosing AuraStay..." required>${fb.adminReply}</textarea>
+                                                    <textarea name="reply" class="form-control" rows="4" placeholder="Dear ${fb.userFullName}, thank you for choosing SmartStay..." required>${fb.adminReply}</textarea>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">

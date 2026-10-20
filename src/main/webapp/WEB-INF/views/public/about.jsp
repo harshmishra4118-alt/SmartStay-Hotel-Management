@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-    <jsp:param name="pageTitle" value="Our Story & Heritage - AuraStay Luxury Suites"/>
+    <jsp:param name="pageTitle" value="Our Story & Heritage - SmartStay Hotel"/>
 </jsp:include>
 <jsp:include page="/WEB-INF/views/common/navbar.jsp" />
 
 <div class="bg-navy py-5 text-white">
     <div class="container text-center">
         <span class="text-gold text-uppercase small fw-bold tracking-wider">Heritage & Philosophy</span>
-        <h1 class="font-serif display-5 mt-1">The AuraStay Story</h1>
+        <h1 class="font-serif display-5 mt-1">The SmartStay Story</h1>
         <p class="text-light opacity-75 mx-auto mb-0" style="max-width: 650px;">
             Established to redefine luxury living through architectural brilliance, artisanal dining, and seamless smart hospitality.
         </p>
@@ -20,7 +20,7 @@
             <span class="text-gold text-uppercase small fw-bold">An Architectural Masterpiece</span>
             <h2 class="font-serif text-navy mt-1 mb-3">Crafted for Discerning Travelers</h2>
             <p class="text-secondary leading-relaxed">
-                Founded with a bold vision, AuraStay stands as an emblem of timeless hospitality in the heart of the city. 
+                Founded with a bold vision, SmartStay stands as an emblem of timeless hospitality in the heart of the city. 
                 Our properties merge neoclassical grandeur with contemporary minimalist aesthetics, creating serene 
                 urban sanctuaries shielded from bustling cityscapes.
             </p>
@@ -45,7 +45,7 @@
         </div>
         <div class="col-lg-6">
             <div class="rounded-3 overflow-hidden shadow-lg">
-                <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80" alt="AuraStay Grand Lobby" class="w-100 object-fit-cover" style="min-height: 400px;">
+                <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80" alt="SmartStay Grand Lobby" class="w-100 object-fit-cover" style="min-height: 400px;">
             </div>
         </div>
     </div>

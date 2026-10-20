@@ -8,7 +8,7 @@
             <div class="d-flex align-items-center gap-2">
                 <i class="bi bi-robot text-gold fs-5"></i>
                 <div>
-                    <h6 class="mb-0 text-white font-serif">AuraStay Concierge</h6>
+                    <h6 class="mb-0 text-white font-serif">SmartStay Concierge</h6>
                     <small class="text-white-50" style="font-size: 0.7rem;">Rule-Based Smart Assistant</small>
                 </div>
             </div>
@@ -19,7 +19,7 @@
 
         <div class="chatbot-messages" id="chatbotMessages">
             <div class="chat-bubble-bot">
-                Hello! Welcome to AuraStay Luxury Suites. How may I assist your stay today?
+                Hello! Welcome to SmartStay Hotel. How may I assist your stay today?
             </div>
             <div class="mt-2 d-flex flex-wrap gap-1">
                 <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.75rem;" onclick="document.getElementById('chatbotInput').value='What are the check-in and check-out timings?'; document.getElementById('chatbotSend').click();">
@@ -46,7 +46,7 @@
     </div>
 
     <!-- Toggle Button -->
-    <div class="chatbot-toggle-btn" id="chatbotToggle" title="Chat with AuraStay Concierge">
+    <div class="chatbot-toggle-btn" id="chatbotToggle" title="Chat with SmartStay Concierge">
         <i class="bi bi-chat-dots-fill"></i>
     </div>
 </div>

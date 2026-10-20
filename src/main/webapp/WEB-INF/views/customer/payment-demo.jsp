@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-    <jsp:param name="pageTitle" value="Demo Payment Simulation - AuraStay Luxury Suites"/>
+    <jsp:param name="pageTitle" value="Demo Payment Simulation - SmartStay Hotel"/>
 </jsp:include>
 <jsp:include page="/WEB-INF/views/common/navbar.jsp" />
 
@@ -122,7 +122,7 @@
                             <div class="mb-3">
                                 <label class="form-label small text-secondary">Virtual Payment Address (VPA)</label>
                                 <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control font-monospace" value="aurastay.guest@okhdfcbank" readonly>
+                                    <input type="text" class="form-control font-monospace" value="SmartStay.guest@okhdfcbank" readonly>
                                     <span class="input-group-text bg-success text-white"><i class="bi bi-check-circle"></i> Verified</span>
                                 </div>
                             </div>

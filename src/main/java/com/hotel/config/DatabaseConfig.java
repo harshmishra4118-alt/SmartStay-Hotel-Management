@@ -60,7 +60,7 @@ public class DatabaseConfig {
             config.setIdleTimeout(idleTimeout);
             config.setConnectionTimeout(connTimeout);
             config.setMaxLifetime(maxLifetime);
-            config.setPoolName("AuraStay-HikariPool");
+            config.setPoolName("SmartStay-HikariPool");
 
             // Recommended MySQL performance properties
             config.addDataSourceProperty("cachePrepStmts", "true");

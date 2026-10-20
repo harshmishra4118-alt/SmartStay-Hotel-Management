@@ -4,8 +4,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark navbar-luxury">
     <div class="container">
         <a class="navbar-brand" href="${pageContext.request.contextPath}/home">
-            <i class="bi bi-gem text-gold"></i>
-            <span>AuraStay</span> Suites
+            <i class="bi bi-building text-gold"></i>
+            <span>SmartStay</span> Hotel
         </a>
 
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">

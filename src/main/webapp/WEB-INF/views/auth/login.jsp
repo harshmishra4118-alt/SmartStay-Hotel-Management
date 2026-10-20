@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-    <jsp:param name="pageTitle" value="Sign In - AuraStay Luxury Suites"/>
+    <jsp:param name="pageTitle" value="Sign In - SmartStay Hotel"/>
 </jsp:include>
 <jsp:include page="/WEB-INF/views/common/navbar.jsp" />
 
@@ -11,9 +11,9 @@
         <div class="col-lg-5 col-md-7">
             <div class="bg-white p-4 p-md-5 rounded-3 shadow border">
                 <div class="text-center mb-4">
-                    <i class="bi bi-gem text-gold display-6 mb-2 d-inline-block"></i>
+                    <i class="bi bi-building text-gold display-6 mb-2 d-inline-block"></i>
                     <h3 class="font-serif text-navy mb-1">Welcome Back</h3>
-                    <p class="text-muted small">Sign in to your AuraStay guest or staff account</p>
+                    <p class="text-muted small">Sign in to your SmartStay guest, staff, or admin account</p>
                 </div>
 
                 <jsp:include page="/WEB-INF/views/common/alerts.jsp" />
@@ -64,15 +64,15 @@
                     <div class="d-flex flex-column gap-1 small text-muted" style="font-size: 0.75rem;">
                         <div>
                             <strong>Administrator:</strong> 
-                            <a href="javascript:void(0)" onclick="fillAccount('admin@aurastay.com')" class="text-primary text-decoration-none">admin@aurastay.com</a>
+                            <a href="javascript:void(0)" onclick="fillAccount('admin@smartstay.com')" class="text-primary text-decoration-none">admin@smartstay.com</a>
                         </div>
                         <div>
                             <strong>Front Desk Staff:</strong> 
-                            <a href="javascript:void(0)" onclick="fillAccount('frontdesk@aurastay.com')" class="text-primary text-decoration-none">frontdesk@aurastay.com</a>
+                            <a href="javascript:void(0)" onclick="fillAccount('frontdesk@smartstay.com')" class="text-primary text-decoration-none">frontdesk@smartstay.com</a>
                         </div>
                         <div>
                             <strong>Housekeeping Staff:</strong> 
-                            <a href="javascript:void(0)" onclick="fillAccount('housekeeping@aurastay.com')" class="text-primary text-decoration-none">housekeeping@aurastay.com</a>
+                            <a href="javascript:void(0)" onclick="fillAccount('housekeeping@smartstay.com')" class="text-primary text-decoration-none">housekeeping@smartstay.com</a>
                         </div>
                         <div>
                             <strong>Customer / Guest:</strong> 

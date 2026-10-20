@@ -31,7 +31,7 @@ public class MyBookingsServlet extends HttpServlet {
             req.setAttribute("bookings", bookings);
 
             if ("true".equals(req.getParameter("registered"))) {
-                req.setAttribute("successMessage", "Welcome to AuraStay! Your account has been created.");
+                req.setAttribute("successMessage", "Welcome to SmartStay! Your account has been created.");
             }
         } catch (Exception e) {
             logger.error("Failed to load user bookings", e);

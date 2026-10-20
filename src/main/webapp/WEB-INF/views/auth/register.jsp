@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-    <jsp:param name="pageTitle" value="Create Account - AuraStay Luxury Suites"/>
+    <jsp:param name="pageTitle" value="Create Account - SmartStay Hotel"/>
 </jsp:include>
 <jsp:include page="/WEB-INF/views/common/navbar.jsp" />
 
@@ -12,7 +12,7 @@
             <div class="bg-white p-4 p-md-5 rounded-3 shadow border">
                 <div class="text-center mb-4">
                     <i class="bi bi-person-plus text-gold display-6 mb-2 d-inline-block"></i>
-                    <h3 class="font-serif text-navy mb-1">Join AuraStay</h3>
+                    <h3 class="font-serif text-navy mb-1">Join SmartStay</h3>
                     <p class="text-muted small">Create your complimentary guest account for effortless booking</p>
                 </div>
 

@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-    <jsp:param name="pageTitle" value="Guest & Customer Directory - AuraStay Admin"/>
+    <jsp:param name="pageTitle" value="Guest & Customer Directory - SmartStay Admin"/>
 </jsp:include>
 
 <div class="container-fluid p-0">

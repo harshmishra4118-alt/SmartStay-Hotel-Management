@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-    <jsp:param name="pageTitle" value="Staff & Shift Management - AuraStay Admin"/>
+    <jsp:param name="pageTitle" value="Staff & Shift Management - SmartStay Admin"/>
 </jsp:include>
 
 <div class="container-fluid p-0">
@@ -98,7 +98,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label small fw-bold text-secondary text-uppercase">Work Email</label>
-                            <input type="email" name="email" class="form-control" placeholder="vikram.sharma@aurastay.com" required>
+                            <input type="email" name="email" class="form-control" placeholder="vikram.sharma@SmartStay.com" required>
                         </div>
                     </div>
 

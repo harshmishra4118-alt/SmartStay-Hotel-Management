@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-    <jsp:param name="pageTitle" value="Luxury Rooms & Suites - AuraStay"/>
+    <jsp:param name="pageTitle" value="Rooms & Suites - SmartStay Hotel"/>
 </jsp:include>
 <jsp:include page="/WEB-INF/views/common/navbar.jsp" />
 
@@ -13,12 +13,13 @@
         <span class="text-gold text-uppercase small fw-bold tracking-wider">Accommodations</span>
         <h1 class="font-serif display-5 mt-1">Rooms & Suites Inventory</h1>
         <p class="text-light opacity-75 mx-auto mb-0" style="max-width: 600px;">
-            Designed for uncompromising comfort, sublime acoustic privacy, and panoramic views.
+            Designed for uncompromising comfort, modern conveniences, and supreme relaxation.
         </p>
     </div>
 </div>
 
 <div class="container my-5">
+    <jsp:include page="/WEB-INF/views/common/alerts.jsp" />
     <!-- Filter Bar Card -->
     <div class="bg-white p-4 rounded-3 shadow-sm border mb-5">
         <form action="${pageContext.request.contextPath}/rooms" method="GET" class="row g-3 align-items-end">
@@ -73,9 +74,14 @@
                 <c:forEach var="room" items="${rooms}">
                     <div class="col-lg-4 col-md-6">
                         <div class="room-card">
-                            <div class="room-card-img-wrapper">
-                                <img src="${room.primaryImageUrl}" alt="${room.name}" loading="lazy">
+                            <div class="room-card-img-wrapper position-relative">
+                                <img src="${not empty room.primaryImageUrl ? room.primaryImageUrl : 'https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=800&q=80'}" 
+                                     alt="${room.name}" loading="lazy"
+                                     onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80';">
                                 <span class="room-badge-type">${room.roomType.displayName}</span>
+                                <span class="badge ${room.operationalStatus == 'ACTIVE' && room.housekeepingStatus != 'OUT_OF_SERVICE' ? 'bg-success' : 'bg-warning'} position-absolute top-0 start-0 m-3 px-2 py-1 shadow-sm">
+                                    <i class="bi bi-check-circle me-1"></i>Available
+                                </span>
                                 <span class="room-badge-price">
                                     ₹<fmt:formatNumber value="${room.pricePerNight}" pattern="#,##0"/> <small>/night</small>
                                 </span>
@@ -117,7 +123,7 @@
                 <i class="bi bi-door-closed text-muted fs-1 mb-3 d-block"></i>
                 <h4 class="font-serif text-navy">No Suites Matched Your Criteria</h4>
                 <p class="text-muted mx-auto mb-4" style="max-width: 500px;">
-                    Try adjusting your budget, selecting different dates, or browsing all room types.
+                    ${not empty errorMessage ? errorMessage : 'Try adjusting your budget, selecting different dates, or browsing all room types.'}
                 </p>
                 <div class="d-flex justify-content-center gap-2">
                     <a href="${pageContext.request.contextPath}/rooms" class="btn btn-navy btn-sm">Reset All Filters</a>

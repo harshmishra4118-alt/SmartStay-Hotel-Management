@@ -73,7 +73,7 @@
 
                     <div class="p-3 bg-light rounded border mb-4 text-secondary small">
                         <i class="bi bi-shield-check text-success me-1"></i>
-                        By proceeding, you agree to AuraStay's standard check-in terms and cancellation policies. 
+                        By proceeding, you agree to SmartStay's standard check-in terms and cancellation policies. 
                         No immediate card charge is made; demo payment can be recorded upon confirmation or settled at the front desk.
                     </div>
 

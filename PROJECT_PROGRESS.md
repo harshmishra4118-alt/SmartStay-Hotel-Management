@@ -1,10 +1,10 @@
 # PROJECT PROGRESS: SMART HOTEL MANAGEMENT SYSTEM
 
-**Project Name**: Smart Hotel Management System (AuraStay Luxury Suites & Resort)  
+**Project Name**: Smart Hotel Management System (SmartStay Hotel)  
 **Target Environment**: Java 17 LTS / Jakarta EE 10 (Tomcat 10.1) / MySQL 8.x / Maven WAR  
 **Architecture**: Clean MVC with DAO, Service, Filter, Servlet, and Model layers  
-**Current Status**: Complete & Verified (Ready for Evaluation and Deployment)  
-**Last Updated**: 2026-10-19 19:45 IST  
+**Current Status**: Complete, Verified & Deployed to Tomcat 10.1 (Ready for Evaluation)  
+**Last Updated**: 2026-10-20 12:15 IST  
 
 ---
 
@@ -97,9 +97,9 @@ All accounts seeded by `database/seed.sql` are protected with 12-round BCrypt cr
 
 | Role | Username / Email | BCrypt Hash Status ($2a$12$) |
 |---|---|---|
-| Administrator | `admin@aurastay.com` | Verified (`$2a$12$3D3X21uIv8aDuFFIYWG46uAB6qprjRO/meeVLaDvHvi8r5Kao8Rci`) |
-| Front Desk Staff | `frontdesk@aurastay.com` | Verified (`$2a$12$mK3TTPGnxtbpoSmZAwdaNeBOHJSkGrQ9aM1Rmiieicqjsf90kI.tW`) |
-| Housekeeping Staff | `housekeeping@aurastay.com` | Verified (`$2a$12$mK3TTPGnxtbpoSmZAwdaNeBOHJSkGrQ9aM1Rmiieicqjsf90kI.tW`) |
+| Administrator | `admin@smartstay.com` | Verified (`$2a$12$3D3X21uIv8aDuFFIYWG46uAB6qprjRO/meeVLaDvHvi8r5Kao8Rci`) |
+| Front Desk Staff | `frontdesk@smartstay.com` | Verified (`$2a$12$mK3TTPGnxtbpoSmZAwdaNeBOHJSkGrQ9aM1Rmiieicqjsf90kI.tW`) |
+| Housekeeping Staff | `housekeeping@smartstay.com` | Verified (`$2a$12$mK3TTPGnxtbpoSmZAwdaNeBOHJSkGrQ9aM1Rmiieicqjsf90kI.tW`) |
 | Guest / Customer 1 | `john.doe@example.com` | Verified (`$2a$12$qorsj67ykvbo8O..gE1UM.4.3npHQLNJQe4hsjKqxgCSSu1hoaGWu`) |
 | Guest / Customer 2 | `sophia.miller@example.com` | Verified (`$2a$12$qorsj67ykvbo8O..gE1UM.4.3npHQLNJQe4hsjKqxgCSSu1hoaGWu`) |
 

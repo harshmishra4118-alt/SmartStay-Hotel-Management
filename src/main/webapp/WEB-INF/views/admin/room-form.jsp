@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-    <jsp:param name="pageTitle" value="${empty room ? 'Add New Suite' : 'Edit Suite'} - AuraStay Admin"/>
+    <jsp:param name="pageTitle" value="${empty room ? 'Add New Suite' : 'Edit Suite'} - SmartStay Admin"/>
 </jsp:include>
 
 <div class="container-fluid p-0">

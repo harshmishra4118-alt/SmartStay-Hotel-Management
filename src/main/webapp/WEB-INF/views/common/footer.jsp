@@ -6,10 +6,10 @@
             <!-- Col 1: Brand & Bio -->
             <div class="col-lg-4 col-md-6">
                 <h5 class="font-serif text-white mb-3">
-                    <i class="bi bi-gem text-gold me-2"></i>AuraStay Suites & Resort
+                    <i class="bi bi-building text-gold me-2"></i>SmartStay Hotel
                 </h5>
                 <p class="text-secondary small mb-3">
-                    A refined sanctuary where timeless architectural elegance meets modern smart hospitality. 
+                    A refined hospitality destination where comfortable modern rooms meet intuitive smart management. 
                     Crafted to provide unforgettable leisure and executive business stays.
                 </p>
                 <div class="d-flex gap-3 fs-5">
@@ -26,7 +26,7 @@
                 <ul class="list-unstyled small d-flex flex-column gap-2 mb-0">
                     <li><a href="${pageContext.request.contextPath}/rooms" class="text-decoration-none text-light opacity-75 hover-opacity-100">Rooms & Suites</a></li>
                     <li><a href="${pageContext.request.contextPath}/rooms/recommend" class="text-decoration-none text-light opacity-75 hover-opacity-100">Smart Recommendation</a></li>
-                    <li><a href="${pageContext.request.contextPath}/about" class="text-decoration-none text-light opacity-75 hover-opacity-100">Our Heritage</a></li>
+                    <li><a href="${pageContext.request.contextPath}/about" class="text-decoration-none text-light opacity-75 hover-opacity-100">About Us</a></li>
                     <li><a href="${pageContext.request.contextPath}/faq" class="text-decoration-none text-light opacity-75 hover-opacity-100">FAQ & Concierge</a></li>
                 </ul>
             </div>
@@ -52,7 +52,7 @@
                     <i class="bi bi-telephone-fill text-gold me-2"></i>+91 (022) 8900 1200
                 </p>
                 <p class="small text-secondary mb-3">
-                    <i class="bi bi-envelope-fill text-gold me-2"></i>concierge@aurastay.com
+                    <i class="bi bi-envelope-fill text-gold me-2"></i>concierge@smartstay.com
                 </p>
                 <span class="badge bg-navy-secondary text-gold border border-secondary px-3 py-2" style="font-size: 0.75rem;">
                     <i class="bi bi-clock-history me-1"></i>24/7 Front Desk Active
@@ -63,7 +63,7 @@
         <hr class="border-secondary my-4 opacity-25">
 
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center small text-secondary">
-            <p class="mb-0">&copy; <%= java.time.LocalDate.now().getYear() %> AuraStay Luxury Suites & Resort. All rights reserved.</p>
+            <p class="mb-0">&copy; <%= java.time.LocalDate.now().getYear() %> SmartStay Hotel. All rights reserved.</p>
             <p class="mb-0">Built with Java 17, Jakarta Servlets, JSP & MySQL.</p>
         </div>
     </div>

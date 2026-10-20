@@ -1,5 +1,5 @@
--- =====================================================================
--- SMART HOTEL MANAGEMENT SYSTEM (AuraStay Luxury Suites)
+﻿-- =====================================================================
+-- SMART HOTEL MANAGEMENT SYSTEM (SmartStay Hotel)
 -- Database: smart_hotel_management
 -- Target: MySQL 8.0+
 -- Character Set: utf8mb4 / utf8mb4_unicode_ci

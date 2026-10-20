@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-    <jsp:param name="pageTitle" value="AuraStay Luxury Suites & Resort | Official Site"/>
+    <jsp:param name="pageTitle" value="SmartStay Hotel | Official Site"/>
 </jsp:include>
 <jsp:include page="/WEB-INF/views/common/navbar.jsp" />
 
@@ -197,7 +197,7 @@
         <div class="text-center mx-auto mb-5" style="max-width: 650px;">
             <span class="text-gold text-uppercase fw-bold small tracking-wider">Guest Testimonials</span>
             <h2 class="font-serif text-navy display-6 mt-1">Refined Hospitality, Confirmed</h2>
-            <p class="text-muted">Real impressions from verified guests who have stayed at AuraStay.</p>
+            <p class="text-muted">Real impressions from verified guests who have stayed at SmartStay Hotel.</p>
         </div>
 
         <div class="row g-4">

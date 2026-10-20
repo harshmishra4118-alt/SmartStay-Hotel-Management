@@ -1,6 +1,6 @@
-# AuraStay Luxury Suites & Resort — Smart Hotel Management System
+# SmartStay Hotel — Smart Hotel Management System
 
-A full-stack, enterprise-grade **Smart Hotel Management System** built with **Java 17, Jakarta Servlets 6.0, Jakarta JSP 3.1, JDBC, HikariCP, and MySQL 8.x**, designed for high performance, bulletproof concurrency, and an intuitive luxury user experience.
+A full-stack, enterprise-grade **Smart Hotel Management System** built with **Java 17, Jakarta Servlets 6.0, Jakarta JSP 3.1, JDBC, HikariCP, and MySQL 8.x**, designed for high performance, bulletproof concurrency, and an intuitive modern hospitality experience.
 
 ---
 
@@ -130,9 +130,9 @@ All accounts seeded by `database/seed.sql` are securely hashed using **12-round 
 
 | Role | Email Identifier | Password Hash Status | Access Portal & Capabilities |
 |---|---|---|---|
-| **Administrator** | `admin@aurastay.com` | `$2a$12$3D3X21uIv8aDuFFIYWG46uAB6qprjRO/meeVLaDvHvi8r5Kao8Rci` | Executive Dashboard, Inventory CRUD, Master Bookings, User Directory, Staff Roster, Feedback Moderation, Financial Analytics & CSV, Audit Trail |
-| **Front Desk Staff** | `frontdesk@aurastay.com` | `$2a$12$mK3TTPGnxtbpoSmZAwdaNeBOHJSkGrQ9aM1Rmiieicqjsf90kI.tW` | Front Desk Terminal, Express Check-In, Express Check-Out, Housekeeping Board, Reservations Lookup |
-| **Housekeeping Staff** | `housekeeping@aurastay.com` | `$2a$12$mK3TTPGnxtbpoSmZAwdaNeBOHJSkGrQ9aM1Rmiieicqjsf90kI.tW` | Housekeeping Room Status Updates (Clean, Dirty, Inspecting, Out of Service) |
+| **Administrator** | `admin@smartstay.com` | `$2a$12$3D3X21uIv8aDuFFIYWG46uAB6qprjRO/meeVLaDvHvi8r5Kao8Rci` | Executive Dashboard, Inventory CRUD, Master Bookings, User Directory, Staff Roster, Feedback Moderation, Financial Analytics & CSV, Audit Trail |
+| **Front Desk Staff** | `frontdesk@smartstay.com` | `$2a$12$mK3TTPGnxtbpoSmZAwdaNeBOHJSkGrQ9aM1Rmiieicqjsf90kI.tW` | Front Desk Terminal, Express Check-In, Express Check-Out, Housekeeping Board, Reservations Lookup |
+| **Housekeeping Staff** | `housekeeping@smartstay.com` | `$2a$12$mK3TTPGnxtbpoSmZAwdaNeBOHJSkGrQ9aM1Rmiieicqjsf90kI.tW` | Housekeeping Room Status Updates (Clean, Dirty, Inspecting, Out of Service) |
 | **Guest / Customer 1** | `john.doe@example.com` | `$2a$12$qorsj67ykvbo8O..gE1UM.4.3npHQLNJQe4hsjKqxgCSSu1hoaGWu` | Search & Book Rooms, My Bookings, Printable Tax Invoices, Demo Payment Simulator, Verified Reviews, Profile & Preferences |
 | **Guest / Customer 2** | `sophia.miller@example.com` | `$2a$12$qorsj67ykvbo8O..gE1UM.4.3npHQLNJQe4hsjKqxgCSSu1hoaGWu` | Room Recommendations, Reservation Vouchers, Notifications, Password Change |
 
@@ -302,10 +302,10 @@ To take a complete snapshot of the database including schema, tables, and seed t
 
 ```powershell
 # Export database to SQL dump file
-mysqldump -u root -p --routines --triggers smart_hotel_management > "aurastay_db_backup_20261019.sql"
+mysqldump -u root -p --routines --triggers smart_hotel_management > "smartstay_db_backup.sql"
 
 # Restore database from backup
-mysql -u root -p smart_hotel_management < "aurastay_db_backup_20261019.sql"
+mysql -u root -p smart_hotel_management < "smartstay_db_backup.sql"
 ```
 
 ---
@@ -322,4 +322,4 @@ mysql -u root -p smart_hotel_management < "aurastay_db_backup_20261019.sql"
 
 ---
 
-*AuraStay Luxury Suites & Resort &mdash; Designed and Engineered for College Capstone Evaluation.*
+*SmartStay Hotel &mdash; Designed and Engineered for College Capstone Evaluation.*

@@ -1,10 +1,10 @@
 -- =====================================================================
--- SMART HOTEL MANAGEMENT SYSTEM (AuraStay Luxury Suites)
+-- SMART HOTEL MANAGEMENT SYSTEM (SmartStay Hotel)
 -- Seed Data: database/seed.sql
 -- Default accounts (seeded with 12-round BCrypt hashes):
--- 1. Admin: admin@aurastay.com
--- 2. Staff (Front Desk): frontdesk@aurastay.com
--- 3. Staff (Housekeeping): housekeeping@aurastay.com
+-- 1. Admin: admin@smartstay.com
+-- 2. Staff (Front Desk): frontdesk@smartstay.com
+-- 3. Staff (Housekeeping): housekeeping@smartstay.com
 -- 4. Customer: john.doe@example.com
 -- 5. Customer: sophia.miller@example.com
 -- Note: All account passwords are encrypted using BCrypt ($2a$12$).
@@ -35,9 +35,9 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- 1. Users (BCrypt 12-round secure hashes)
 -- ---------------------------------------------------------------------
 INSERT INTO users (id, email, password_hash, role, full_name, phone, status, created_at) VALUES
-(1, 'admin@aurastay.com', '$2a$12$3D3X21uIv8aDuFFIYWG46uAB6qprjRO/meeVLaDvHvi8r5Kao8Rci', 'ADMIN', 'Victoria Sterling (General Manager)', '+91 98765 43210', 'ACTIVE', NOW()),
-(2, 'frontdesk@aurastay.com', '$2a$12$mK3TTPGnxtbpoSmZAwdaNeBOHJSkGrQ9aM1Rmiieicqjsf90kI.tW', 'STAFF', 'Marcus Vance (Front Desk Executive)', '+91 98765 43211', 'ACTIVE', NOW()),
-(3, 'housekeeping@aurastay.com', '$2a$12$mK3TTPGnxtbpoSmZAwdaNeBOHJSkGrQ9aM1Rmiieicqjsf90kI.tW', 'STAFF', 'Elena Rostova (Executive Housekeeper)', '+91 98765 43212', 'ACTIVE', NOW()),
+(1, 'admin@SmartStay.com', '$2a$12$3D3X21uIv8aDuFFIYWG46uAB6qprjRO/meeVLaDvHvi8r5Kao8Rci', 'ADMIN', 'Victoria Sterling (General Manager)', '+91 98765 43210', 'ACTIVE', NOW()),
+(2, 'frontdesk@SmartStay.com', '$2a$12$mK3TTPGnxtbpoSmZAwdaNeBOHJSkGrQ9aM1Rmiieicqjsf90kI.tW', 'STAFF', 'Marcus Vance (Front Desk Executive)', '+91 98765 43211', 'ACTIVE', NOW()),
+(3, 'housekeeping@SmartStay.com', '$2a$12$mK3TTPGnxtbpoSmZAwdaNeBOHJSkGrQ9aM1Rmiieicqjsf90kI.tW', 'STAFF', 'Elena Rostova (Executive Housekeeper)', '+91 98765 43212', 'ACTIVE', NOW()),
 (4, 'john.doe@example.com', '$2a$12$qorsj67ykvbo8O..gE1UM.4.3npHQLNJQe4hsjKqxgCSSu1hoaGWu', 'CUSTOMER', 'Johnathan Doe', '+91 91234 56789', 'ACTIVE', NOW()),
 (5, 'sophia.miller@example.com', '$2a$12$qorsj67ykvbo8O..gE1UM.4.3npHQLNJQe4hsjKqxgCSSu1hoaGWu', 'CUSTOMER', 'Sophia Miller', '+91 98989 12345', 'ACTIVE', NOW());
 
@@ -141,14 +141,14 @@ INSERT INTO feedback (id, booking_id, user_id, room_id, rating, cleanliness_rati
 (1, 1, 4, 3, 5, 5, 5, 5, 
  'An exceptional luxury experience! The garden retreat room was impeccably clean, spacious, and quiet. The staff was remarkably friendly and attentive to every detail. We loved our anniversary celebration here!', 
  'POSITIVE', '+exceptional, +clean, +spacious, +quiet, +friendly, +loved', TRUE, 
- 'Dear Mr. Doe, thank you sincerely for choosing AuraStay for your anniversary. It was an honor hosting you and we look forward to welcoming you back soon!', 
+ 'Dear Mr. Doe, thank you sincerely for choosing SmartStay for your anniversary. It was an honor hosting you and we look forward to welcoming you back soon!', 
  NOW() - INTERVAL 1 DAY);
 
 -- ---------------------------------------------------------------------
 -- 9. Notifications
 -- ---------------------------------------------------------------------
 INSERT INTO notifications (user_id, title, message, notification_type, is_read, reference_link, created_at) VALUES
-(4, 'Welcome to AuraStay Luxury Suites', 'Your guest account has been successfully created. Explore our suites and curated dining experiences.', 'SYSTEM', TRUE, '/rooms', NOW() - INTERVAL 10 DAY),
+(4, 'Welcome to SmartStay Hotel', 'Your guest account has been successfully created. Explore our suites and curated dining experiences.', 'SYSTEM', TRUE, '/rooms', NOW() - INTERVAL 10 DAY),
 (4, 'Reservation Confirmed: ASTAY-20261015-9921', 'Your stay in Grand Deluxe Garden Retreat has been confirmed.', 'BOOKING', TRUE, '/customer/my-bookings', NOW() - INTERVAL 10 DAY),
 (5, 'Check-In Completed: ASTAY-20261018-8834', 'Welcome to Royal Executive Suite (Room 301). Our concierge is at your service 24/7.', 'CHECKIN', FALSE, '/customer/my-bookings', NOW());
 
@@ -156,11 +156,11 @@ INSERT INTO notifications (user_id, title, message, notification_type, is_read, 
 -- 10. Application Settings
 -- ---------------------------------------------------------------------
 INSERT INTO application_settings (setting_key, setting_value, description) VALUES
-('hotel.name', 'AuraStay Luxury Suites & Resort', 'Official hotel name'),
+('hotel.name', 'SmartStay Hotel', 'Official hotel name'),
 ('hotel.tagline', 'Where Timeless Elegance Meets Smart Luxury', 'Hotel tagline'),
 ('hotel.address', '7 Royal Palms Boulevard, Marina Bay District', 'Physical location address'),
 ('hotel.phone', '+91 (022) 8900 1200', 'Front desk primary telephone'),
-('hotel.email', 'concierge@aurastay.com', 'Official inquiries email'),
+('hotel.email', 'concierge@SmartStay.com', 'Official inquiries email'),
 ('hotel.tax_rate', '12.0', 'Standard GST / Luxury tax rate percentage'),
 ('hotel.checkin_time', '14:00', 'Standard check-in time 2:00 PM'),
 ('hotel.checkout_time', '11:00', 'Standard check-out time 11:00 AM');

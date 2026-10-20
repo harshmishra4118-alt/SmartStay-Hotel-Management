@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-    <jsp:param name="pageTitle" value="My Reservations - AuraStay Luxury Suites"/>
+    <jsp:param name="pageTitle" value="My Reservations - SmartStay Hotel"/>
 </jsp:include>
 <jsp:include page="/WEB-INF/views/common/navbar.jsp" />
 
@@ -112,7 +112,7 @@
                 <i class="bi bi-calendar-x text-muted fs-1 mb-3 d-block"></i>
                 <h4 class="font-serif text-navy">No Reservations on Record</h4>
                 <p class="text-muted mx-auto mb-4" style="max-width: 480px;">
-                    You do not currently have any active or past reservations with AuraStay.
+                    You do not currently have any active or past reservations with SmartStay.
                 </p>
                 <a href="${pageContext.request.contextPath}/rooms" class="btn btn-gold btn-sm px-4">
                     <i class="bi bi-search me-1"></i>Find Your Perfect Suite

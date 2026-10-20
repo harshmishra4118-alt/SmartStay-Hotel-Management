@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-    <jsp:param name="pageTitle" value="Guest Express Check-In - AuraStay Front Desk"/>
+    <jsp:param name="pageTitle" value="Guest Express Check-In - SmartStay Front Desk"/>
 </jsp:include>
 
 <div class="container-fluid p-0">

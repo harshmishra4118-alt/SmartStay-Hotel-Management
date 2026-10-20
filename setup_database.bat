@@ -1,9 +1,9 @@
 @echo off
 setlocal enabledelayedexpansion
-title AuraStay Smart Hotel Management - Automated Database Setup
+title SmartStay Hotel Management - Automated Database Setup
 
 echo =====================================================================
-echo  AuraStay Luxury Suites - Automated MySQL Database Setup
+echo  SmartStay Hotel - Automated MySQL Database Setup
 echo =====================================================================
 echo.
 
@@ -50,10 +50,8 @@ echo [SUCCESS] Seed data imported successfully!
 
 echo.
 echo [4/4] Updating local db.properties configuration...
-powershell -NoProfile -Command "(Get-Content '%~dp0src\main\resources\db.properties') -replace 'db.password=.*', ('db.password=' + $env:DB_PASS) | Set-Content '%~dp0src\main\resources\db.properties'"
-if exist "C:\apache-tomcat-10.1.59\webapps\smart-hotel-management\WEB-INF\classes\db.properties" (
-    powershell -NoProfile -Command "(Get-Content 'C:\apache-tomcat-10.1.59\webapps\smart-hotel-management\WEB-INF\classes\db.properties') -replace 'db.password=.*', ('db.password=' + $env:DB_PASS) | Set-Content 'C:\apache-tomcat-10.1.59\webapps\smart-hotel-management\WEB-INF\classes\db.properties'"
-)
+set "DB_PASS_VAL=!DB_PASS!"
+powershell -NoProfile -Command "$pass = [System.Environment]::GetEnvironmentVariable('DB_PASS_VAL'); $p1 = '%~dp0src\main\resources\db.properties'; $c1 = [System.IO.File]::ReadAllText($p1) -replace 'db.password=.*', ('db.password=' + $pass); [System.IO.File]::WriteAllText($p1, $c1, [System.Text.UTF8Encoding]::new($false)); $p2 = 'C:\apache-tomcat-10.1.59\webapps\smart-hotel-management\WEB-INF\classes\db.properties'; if (Test-Path $p2) { $c2 = [System.IO.File]::ReadAllText($p2) -replace 'db.password=.*', ('db.password=' + $pass); [System.IO.File]::WriteAllText($p2, $c2, [System.Text.UTF8Encoding]::new($false)) }"
 
 echo.
 echo =====================================================================

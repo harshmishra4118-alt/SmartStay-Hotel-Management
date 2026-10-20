@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-    <jsp:param name="pageTitle" value="Tax Invoice #${invoice.invoiceNumber} - AuraStay Luxury Suites"/>
+    <jsp:param name="pageTitle" value="Tax Invoice #${invoice.invoiceNumber} - SmartStay Hotel"/>
 </jsp:include>
 <jsp:include page="/WEB-INF/views/common/navbar.jsp" />
 
@@ -51,9 +51,9 @@
                 <div class="col-sm-7">
                     <div class="d-flex align-items-center gap-2 mb-2">
                         <i class="bi bi-gem text-gold fs-3"></i>
-                        <span class="font-serif fs-3 fw-bold text-navy">AuraStay</span>
+                        <span class="font-serif fs-3 fw-bold text-navy">SmartStay</span>
                     </div>
-                    <p class="text-secondary small mb-1">AuraStay Luxury Suites & Resort Private Limited</p>
+                    <p class="text-secondary small mb-1">SmartStay Hotel Private Limited</p>
                     <p class="text-secondary small mb-1">742 Marine Drive, Promenade District, Mumbai 400020</p>
                     <p class="text-secondary small mb-0">GSTIN: <span class="fw-semibold">27AAACA1234F1Z8</span> | CIN: U55101MH2023PTC998877</p>
                 </div>
@@ -210,11 +210,11 @@
                         <small class="text-muted d-block mb-1"><strong>Terms & Conditions:</strong></small>
                         <small class="text-muted d-block">1. This computer-generated document constitutes an official Tax Invoice under Indian GST regulations.</small>
                         <small class="text-muted d-block">2. All demo payment records are for simulation and college evaluation demonstration purposes.</small>
-                        <small class="text-muted d-block">3. For billing inquiries, contact billing@aurastay.com or frontdesk +91 22 2200 8899.</small>
+                        <small class="text-muted d-block">3. For billing inquiries, contact billing@SmartStay.com or frontdesk +91 22 2200 8899.</small>
                     </div>
                     <div class="col-sm-4 text-sm-end mt-4 mt-sm-0">
                         <div class="border-bottom border-dark pb-2 mb-1" style="width: 160px; margin-left: auto;">
-                            <span class="font-serif fst-italic text-navy fw-bold">AuraStay Desk</span>
+                            <span class="font-serif fst-italic text-navy fw-bold">SmartStay Desk</span>
                         </div>
                         <small class="text-muted d-block">Authorized Signatory</small>
                     </div>
