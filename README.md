@@ -181,7 +181,22 @@ target/smart-hotel-management.war
 
 ---
 
-### Option A: Standalone Apache Tomcat 10.1
+### Quick Launch (Simplest for Beginners)
+To run the system with minimal manual steps:
+1. **Initialize Database**:
+   - Run `setup_database.bat` in PowerShell or Command Prompt (or double-click it in Windows Explorer).
+   - Enter your local MySQL root password when prompted.
+   - The script automatically creates `smart_hotel_management`, imports `schema.sql` and `seed.sql`, and syncs `db.properties`.
+2. **Start Server**:
+   - Run `start_tomcat.bat` (or keep the currently active background server running).
+3. **Open Browser**:
+   - Navigate to `http://localhost:8080/smart-hotel-management/`
+4. **Stop Server**:
+   - Run `stop_tomcat.bat` when finished.
+
+---
+
+### Option A: Manual Apache Tomcat 10.1 Setup
 1. **Configure Database Credentials**:
    Ensure `src/main/resources/db.properties` contains your local MySQL root password:
    ```properties
