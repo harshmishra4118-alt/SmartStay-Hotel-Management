@@ -5,7 +5,7 @@ COPY src ./src
 RUN mvn -B -DskipTests package
 
 FROM tomcat:10.1.59-jdk17-temurin
-RUN rm -rf /usr/local/tomcat/webapps/*
+RUN rm -rf /usr/local/tomcat/webapps/* && sed -i 's/port="8080"/port="10000"/' /usr/local/tomcat/conf/server.xml
 COPY --from=build /app/target/smart-hotel-management.war /usr/local/tomcat/webapps/ROOT.war
-EXPOSE 8080
+EXPOSE 10000
 CMD ["catalina.sh", "run"]
