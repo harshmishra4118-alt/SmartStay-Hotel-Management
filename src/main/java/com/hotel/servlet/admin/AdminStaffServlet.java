@@ -1,11 +1,13 @@
 package com.hotel.servlet.admin;
 
 import com.hotel.dao.AuditLogDAO;
+import com.hotel.dao.HotelStaffAssignmentDAO;
 import com.hotel.dao.StaffDetailDAO;
 import com.hotel.dao.UserDAO;
 import com.hotel.model.StaffDetail;
 import com.hotel.model.User;
 import com.hotel.service.AuthService;
+import com.hotel.service.HotelService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,17 +26,31 @@ public class AdminStaffServlet extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(AdminStaffServlet.class);
     private final StaffDetailDAO staffDetailDAO = new StaffDetailDAO();
+    private final HotelStaffAssignmentDAO hotelStaffAssignmentDAO = new HotelStaffAssignmentDAO();
+    private final HotelService hotelService = new HotelService();
     private final UserDAO userDAO = new UserDAO();
     private final AuthService authService = new AuthService();
     private final AuditLogDAO auditLogDAO = new AuditLogDAO();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession(false);
+        User currentAdmin = session != null ? (User) session.getAttribute("currentUser") : null;
+        Long scopedHotelId = (currentAdmin != null && currentAdmin.isHotelAdmin()) ? currentAdmin.getAssignedHotelId() : null;
+
+        String hotelParam = req.getParameter("hotelId");
+        if (scopedHotelId == null && hotelParam != null && !hotelParam.trim().isEmpty()) {
+            try { scopedHotelId = Long.parseLong(hotelParam.trim()); } catch (Exception ignored) {}
+        }
+
         try {
-            List<StaffDetail> staffList = staffDetailDAO.listAllStaff();
+            List<StaffDetail> staffList = staffDetailDAO.listStaffByHotel(scopedHotelId);
             req.setAttribute("staffList", staffList);
             req.setAttribute("departments", StaffDetail.Department.values());
             req.setAttribute("shifts", StaffDetail.Shift.values());
+            req.setAttribute("allHotels", hotelService.getAllHotels());
+            req.setAttribute("scopedHotelId", scopedHotelId);
+            req.setAttribute("isOwnerScope", currentAdmin != null && currentAdmin.isHotelAdmin());
 
             req.getRequestDispatcher("/WEB-INF/views/admin/staff.jsp").forward(req, resp);
 
@@ -61,6 +77,16 @@ public class AdminStaffServlet extends HttpServlet {
                 String departmentStr = req.getParameter("department");
                 String shiftStr = req.getParameter("shift");
 
+                Long hotelId = 1L;
+                if (currentAdmin != null && currentAdmin.isHotelAdmin()) {
+                    hotelId = currentAdmin.getAssignedHotelId();
+                } else {
+                    String hotelIdParam = req.getParameter("hotelId");
+                    if (hotelIdParam != null && !hotelIdParam.trim().isEmpty()) {
+                        try { hotelId = Long.parseLong(hotelIdParam.trim()); } catch (Exception ignored) {}
+                    }
+                }
+
                 User user = authService.register(email, password, fullName, phone, req.getRemoteAddr());
                 userDAO.updateRole(user.getId(), User.Role.STAFF);
 
@@ -72,9 +98,10 @@ public class AdminStaffServlet extends HttpServlet {
                 staff.setHireDate(LocalDate.now());
 
                 staffDetailDAO.saveOrUpdate(staff);
+                hotelStaffAssignmentDAO.assignStaff(hotelId, user.getId(), departmentStr);
 
                 auditLogDAO.log(currentAdmin.getId(), "STAFF_ACCOUNT_CREATED", "Staff", String.valueOf(user.getId()),
-                        "Created staff account for " + fullName + " (" + employeeCode + ")", req.getRemoteAddr());
+                        "Created staff account for " + fullName + " (" + employeeCode + ") at Hotel #" + hotelId, req.getRemoteAddr());
 
                 resp.sendRedirect(req.getContextPath() + "/admin/staff?created=true");
             }

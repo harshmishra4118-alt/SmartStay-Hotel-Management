@@ -3,13 +3,17 @@ package com.hotel.servlet.admin;
 import com.hotel.dao.ReportDAO;
 import com.hotel.model.AuditLog;
 import com.hotel.model.Booking;
+import com.hotel.model.Hotel;
+import com.hotel.model.User;
 import com.hotel.service.BookingService;
+import com.hotel.service.HotelService;
 import com.hotel.service.ReportService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,19 +28,34 @@ public class AdminDashboardServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(AdminDashboardServlet.class);
     private final ReportService reportService = new ReportService();
     private final BookingService bookingService = new BookingService();
+    private final HotelService hotelService = new HotelService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession(false);
+        User currentUser = (session != null) ? (User) session.getAttribute("currentUser") : null;
+
         try {
-            ReportDAO.DashboardMetrics metrics = reportService.getDashboardMetrics();
-            List<Booking> recentBookings = bookingService.listAllBookings(null, null, null, 0, 6);
+            Long scopedHotelId = (currentUser != null && currentUser.isHotelAdmin()) ? currentUser.getAssignedHotelId() : null;
+
+            ReportDAO.DashboardMetrics metrics = reportService.getDashboardMetrics(scopedHotelId);
+            List<Booking> recentBookings = bookingService.listAllBookings(scopedHotelId, null, null, null, 0, 6);
             List<AuditLog> recentLogs = reportService.getRecentAuditLogs(8);
-            Map<String, java.math.BigDecimal> monthlyRevenue = reportService.getMonthlyRevenueForYear(LocalDate.now().getYear());
+            Map<String, java.math.BigDecimal> monthlyRevenue = reportService.getMonthlyRevenueForYear(LocalDate.now().getYear(), scopedHotelId);
+
+            List<Hotel> allHotels = hotelService.getAllHotels();
+            Hotel myHotel = null;
+            if (currentUser != null && currentUser.isHotelAdmin()) {
+                myHotel = hotelService.getHotelById(currentUser.getAssignedHotelId());
+            }
 
             req.setAttribute("metrics", metrics);
             req.setAttribute("recentBookings", recentBookings);
             req.setAttribute("recentLogs", recentLogs);
             req.setAttribute("monthlyRevenue", monthlyRevenue);
+            req.setAttribute("allHotels", allHotels);
+            req.setAttribute("myHotel", myHotel);
+            req.setAttribute("currentUser", currentUser);
 
             req.getRequestDispatcher("/WEB-INF/views/admin/dashboard.jsp").forward(req, resp);
 

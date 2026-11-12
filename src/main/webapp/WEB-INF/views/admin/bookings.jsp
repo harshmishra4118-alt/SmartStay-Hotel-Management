@@ -92,12 +92,15 @@
                                             <td>
                                                 <span class="badge bg-light text-navy border">Room #${b.roomNumber}</span>
                                                 <small class="d-block text-muted text-truncate" style="max-width: 140px;">${b.roomName}</small>
+                                                <c:if test="${not empty b.hotelName}">
+                                                    <small class="d-block text-primary fw-semibold" style="font-size: 0.7rem;"><i class="bi bi-buildings me-1"></i>${b.hotelName}</small>
+                                                </c:if>
                                             </td>
                                             <td>
                                                 <span>${b.checkInDate} &rarr; ${b.checkOutDate}</span>
                                                 <small class="d-block text-muted">(${b.totalNights} nights)</small>
                                             </td>
-                                            <td>${b.numAdults} Ad, ${b.numChildren} Ch</td>
+                                            <td>${b.numGuests} Guest${b.numGuests > 1 ? 's' : ''}</td>
                                             <td class="fw-bold text-navy">₹<fmt:formatNumber value="${b.totalAmount}" pattern="#,##0.00"/></td>
                                             <td>
                                                 <span class="badge ${b.bookingStatus.name() == 'CONFIRMED' ? 'badge-confirmed' : (b.bookingStatus.name() == 'CHECKED_IN' ? 'badge-paid' : (b.bookingStatus.name() == 'CHECKED_OUT' ? 'bg-secondary' : 'badge-unpaid'))}">

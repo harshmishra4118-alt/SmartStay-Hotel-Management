@@ -32,6 +32,57 @@
 
             <jsp:include page="/WEB-INF/views/common/alerts.jsp" />
 
+            <c:choose>
+                <c:when test="${sessionScope.currentUser.hotelAdmin}">
+                    <!-- Individual Hotel Owner Portal Banner -->
+                    <div class="alert alert-info border-0 rounded-4 p-3 mb-4 shadow-sm d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-3">
+                            <i class="bi bi-building-check fs-2 text-primary"></i>
+                            <div>
+                                <span class="badge bg-navy text-gold fw-bold mb-1">Individual Hotel Owner Portal</span>
+                                <h5 class="font-serif text-navy mb-0">${myHotel.name} (${myHotel.city})</h5>
+                                <small class="text-muted">${myHotel.address} &bull; Star Rating: ${myHotel.starRating} &#9733;</small>
+                            </div>
+                        </div>
+                        <a href="${pageContext.request.contextPath}/admin/hotel-form?id=${myHotel.id}" class="btn btn-navy btn-sm">
+                            <i class="bi bi-pencil me-1 text-gold"></i>Edit Hotel Profile
+                        </a>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <!-- Super Admin Multi-Hotel Control Banner -->
+                    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <span class="badge bg-gold text-dark fw-bold mb-1">Super Admin Multi-Hotel Control</span>
+                                <h5 class="font-serif text-navy mb-0">Platform Hotel Portfolio (${allHotels.size()} Properties Across India)</h5>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <a href="${pageContext.request.contextPath}/admin/hotel-form" class="btn btn-gold btn-sm fw-bold">
+                                    <i class="bi bi-plus-circle me-1"></i>Add Property
+                                </a>
+                                <a href="${pageContext.request.contextPath}/admin/hotels" class="btn btn-outline-navy btn-sm">
+                                    <i class="bi bi-buildings me-1"></i>Manage Portfolio
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <c:forEach var="h" items="${allHotels}">
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="p-3 border rounded-3 bg-light d-flex align-items-center gap-3">
+                                        <img src="${h.primaryImageUrl}" alt="${h.name}" class="rounded-2" style="width: 60px; height: 50px; object-fit: cover;" />
+                                        <div class="text-truncate">
+                                            <strong class="d-block text-truncate text-navy font-serif" style="font-size: 0.9rem;">${h.name}</strong>
+                                            <small class="text-muted">${h.city} &bull; &#9733; ${h.starRating}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+
             <!-- Metric Cards (6 KPI Grid) -->
             <div class="row g-3 mb-4">
                 <div class="col-sm-6 col-xl-2">

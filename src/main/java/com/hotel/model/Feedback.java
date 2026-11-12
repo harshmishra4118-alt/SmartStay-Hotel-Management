@@ -25,6 +25,7 @@ public class Feedback implements Serializable {
     private Long id;
     private Long bookingId;
     private Long userId;
+    private Long hotelId;
     private Long roomId;
     private int rating;
     private int cleanlinessRating;
@@ -43,6 +44,7 @@ public class Feedback implements Serializable {
     private String roomName;
     private String roomNumber;
     private String bookingReference;
+    private String hotelName;
 
     public Feedback() {
         this.rating = 5;
@@ -61,6 +63,12 @@ public class Feedback implements Serializable {
 
     public Long getUserId() { return userId; }
     public void setUserId(Long userId) { this.userId = userId; }
+
+    public Long getHotelId() { return hotelId; }
+    public void setHotelId(Long hotelId) { this.hotelId = hotelId; }
+
+    public String getHotelName() { return hotelName; }
+    public void setHotelName(String hotelName) { this.hotelName = hotelName; }
 
     public Long getRoomId() { return roomId; }
     public void setRoomId(Long roomId) { this.roomId = roomId; }

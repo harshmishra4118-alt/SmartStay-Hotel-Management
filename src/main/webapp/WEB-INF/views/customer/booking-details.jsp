@@ -47,7 +47,6 @@
                 </span>
                 <div class="d-block">
                     <c:choose>
-                        <c:param name="status" value="${booking.bookingStatus.name()}"/>
                         <c:when test="${booking.bookingStatus.name() == 'CONFIRMED'}"><span class="badge badge-confirmed">Confirmed</span></c:when>
                         <c:when test="${booking.bookingStatus.name() == 'CHECKED_IN'}"><span class="badge badge-checkedin">Checked In</span></c:when>
                         <c:when test="${booking.bookingStatus.name() == 'CHECKED_OUT'}"><span class="badge badge-checkedout">Checked Out</span></c:when>

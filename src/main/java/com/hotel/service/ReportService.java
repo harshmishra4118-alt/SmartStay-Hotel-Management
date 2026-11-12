@@ -19,7 +19,11 @@ public class ReportService {
     private final AuditLogDAO auditLogDAO = new AuditLogDAO();
 
     public ReportDAO.DashboardMetrics getDashboardMetrics() throws SQLException {
-        return reportDAO.getDashboardMetrics();
+        return reportDAO.getDashboardMetrics(null);
+    }
+
+    public ReportDAO.DashboardMetrics getDashboardMetrics(Long hotelId) throws SQLException {
+        return reportDAO.getDashboardMetrics(hotelId);
     }
 
     public List<AuditLog> getRecentAuditLogs(int limit) throws SQLException {
@@ -27,7 +31,11 @@ public class ReportService {
     }
 
     public Map<String, java.math.BigDecimal> getMonthlyRevenueForYear(int year) throws SQLException {
-        return reportDAO.getMonthlyRevenueForYear(year);
+        return reportDAO.getMonthlyRevenueForYear(year, null);
+    }
+
+    public Map<String, java.math.BigDecimal> getMonthlyRevenueForYear(int year, Long hotelId) throws SQLException {
+        return reportDAO.getMonthlyRevenueForYear(year, hotelId);
     }
 
     /**

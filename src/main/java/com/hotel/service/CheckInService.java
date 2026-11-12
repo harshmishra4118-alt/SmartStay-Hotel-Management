@@ -105,7 +105,15 @@ public class CheckInService {
         return bookingDAO.getTodayArrivals();
     }
 
+    public List<Booking> getTodayArrivals(Long hotelId) throws SQLException {
+        return bookingDAO.getTodayArrivals(hotelId);
+    }
+
     public List<Booking> getTodayDepartures() throws SQLException {
         return bookingDAO.getTodayDepartures();
+    }
+
+    public List<Booking> getTodayDepartures(Long hotelId) throws SQLException {
+        return bookingDAO.getTodayDepartures(hotelId);
     }
 }

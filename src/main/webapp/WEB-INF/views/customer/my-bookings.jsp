@@ -17,6 +17,25 @@
 <div class="container my-5">
     <jsp:include page="/WEB-INF/views/common/alerts.jsp" />
 
+    <c:if test="${param.registered == 'true'}">
+        <div class="alert alert-success alert-dismissible fade show p-4 mb-4 rounded-3 shadow-sm border-success" role="alert">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                <div>
+                    <h5 class="alert-heading font-serif text-success mb-1">
+                        <i class="bi bi-check-circle-fill me-2"></i>Welcome to SmartStay, <c:out value="${sessionScope.currentUser.fullName}"/>!
+                    </h5>
+                    <p class="mb-0 small text-muted">
+                        Your complimentary guest account has been successfully created. Begin your journey by discovering our handpicked luxury suites across India.
+                    </p>
+                </div>
+                <a href="${pageContext.request.contextPath}/rooms" class="btn btn-gold btn-sm px-4 fw-semibold text-navy">
+                    <i class="bi bi-search me-1"></i>Browse Available Rooms
+                </a>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </c:if>
+
     <c:if test="${param.cancelled == 'true'}">
         <div class="alert alert-warning alert-dismissible fade show small mb-4" role="alert">
             <i class="bi bi-info-circle-fill me-2"></i> Your reservation has been successfully cancelled.

@@ -74,6 +74,12 @@ public class InvoiceDAO extends BaseDAO {
         return null;
     }
 
+    public boolean updatePaymentStatus(Long id, Invoice.PaymentStatus status) throws SQLException {
+        try (Connection conn = getConnection()) {
+            return updatePaymentStatus(id, status, conn);
+        }
+    }
+
     public boolean updatePaymentStatus(Long id, Invoice.PaymentStatus status, Connection conn) throws SQLException {
         String sql = "UPDATE invoices SET payment_status = ?, updated_at = NOW() WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {

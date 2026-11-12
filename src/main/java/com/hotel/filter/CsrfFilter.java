@@ -42,15 +42,14 @@ public class CsrfFilter implements Filter {
         req.setAttribute("csrfToken", token);
 
         String method = req.getMethod();
-        // Exempt public read queries or AJAX chatbot query if needed
         boolean isStateChanging = "POST".equalsIgnoreCase(method) ||
                                   "PUT".equalsIgnoreCase(method) ||
                                   "DELETE".equalsIgnoreCase(method);
 
-        // Allow chatbot AJAX without hard failure if desired, or allow if token matched
-        boolean isChatbotEndpoint = path.equals("/api/chatbot");
+        // Exempt AJAX API endpoints and external payment webhooks/verification
+        boolean isExemptApi = path.startsWith("/api/") || path.equals("/payment/razorpay-verify");
 
-        if (isStateChanging && !isChatbotEndpoint) {
+        if (isStateChanging && !isExemptApi) {
             if (!CsrfUtil.isValidToken(req)) {
                 logger.warn("CSRF token validation failed for path: {} from IP: {}", path, req.getRemoteAddr());
                 res.sendError(HttpServletResponse.SC_FORBIDDEN, "Security verification failed (Invalid or missing CSRF token). Please refresh the page and try again.");

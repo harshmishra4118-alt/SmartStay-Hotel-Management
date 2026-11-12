@@ -34,6 +34,21 @@
                     </c:if>
 
                     <h6 class="text-navy text-uppercase fw-bold small mb-3 border-bottom pb-2">Core Suite Identity</h6>
+                    <c:choose>
+                        <c:when test="${not empty scopedHotelId}">
+                            <input type="hidden" name="hotelId" value="${scopedHotelId}">
+                        </c:when>
+                        <c:otherwise>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-secondary text-uppercase">Assigned Hotel Property</label>
+                                <select name="hotelId" class="form-select" required>
+                                    <c:forEach var="h" items="${allHotels}">
+                                        <option value="${h.id}" ${(not empty room && room.hotelId == h.id) ? 'selected' : ''}>${h.name} (${h.city})</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
                     <div class="row g-3 mb-3">
                         <div class="col-md-4">
                             <label class="form-label small fw-bold text-secondary text-uppercase">Room Number</label>

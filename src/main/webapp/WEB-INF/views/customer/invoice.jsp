@@ -14,12 +14,18 @@
             <p class="text-light opacity-75 small mb-0">Official receipt and payment ledger for reservation ${booking.bookingReference}.</p>
         </div>
         <div class="mt-3 mt-md-0 d-flex gap-2">
+            <a href="${pageContext.request.contextPath}/customer/invoice/pdf?invoiceId=${invoice.id}" class="btn btn-gold btn-sm fw-bold">
+                <i class="bi bi-file-earmark-pdf-fill me-1"></i> Download PDF Invoice
+            </a>
             <button onclick="window.print()" class="btn btn-outline-light btn-sm">
                 <i class="bi bi-printer me-1"></i> Print Invoice
             </button>
             <c:if test="${invoice.paymentStatus.name() != 'PAID' && booking.bookingStatus.name() != 'CANCELLED'}">
-                <a href="${pageContext.request.contextPath}/customer/payment?invoiceId=${invoice.id}" class="btn btn-gold btn-sm">
-                    <i class="bi bi-credit-card-2-front me-1"></i> Pay Balance Online (Demo)
+                <a href="${pageContext.request.contextPath}/payment/razorpay?bookingId=${booking.id}" class="btn btn-success btn-sm fw-bold">
+                    <i class="bi bi-credit-card-2-front me-1"></i> Pay with Razorpay
+                </a>
+                <a href="${pageContext.request.contextPath}/customer/payment?invoiceId=${invoice.id}" class="btn btn-outline-light btn-sm">
+                    Demo Card/UPI
                 </a>
             </c:if>
         </div>
@@ -60,7 +66,7 @@
                 <div class="col-sm-5 text-sm-end mt-3 mt-sm-0">
                     <span class="badge bg-navy text-gold px-3 py-2 fs-6 mb-2">ORIGINAL TAX INVOICE</span>
                     <h5 class="fw-bold text-navy mb-1">${invoice.invoiceNumber}</h5>
-                    <p class="text-muted small mb-1">Issued: <fmt:parseDate value="${invoice.issueDate}" pattern="yyyy-MM-dd" var="parsedIssue" type="date"/><fmt:formatDate value="${parsedIssue}" pattern="dd MMM yyyy"/></p>
+                    <p class="text-muted small mb-1">Issued: ${not empty invoice.formattedIssueDate ? invoice.formattedIssueDate : invoice.issueDate}</p>
                     <c:choose>
                         <c:when test="${invoice.paymentStatus.name() == 'PAID'}">
                             <span class="badge badge-paid fs-6"><i class="bi bi-check-circle me-1"></i>PAID IN FULL</span>

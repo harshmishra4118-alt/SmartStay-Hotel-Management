@@ -4,6 +4,7 @@
 # =====================================================================
 
 $ErrorActionPreference = "Stop"
+$ProgressPreference = "SilentlyContinue"
 
 $workspaceRoot = $PSScriptRoot
 if ([string]::IsNullOrWhiteSpace($workspaceRoot)) {

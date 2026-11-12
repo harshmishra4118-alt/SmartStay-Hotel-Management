@@ -24,6 +24,8 @@ public class User implements Serializable {
     private LocalDateTime lastLoginAt;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Long assignedHotelId;
+    private String assignedHotelName;
 
     public User() {
         this.role = Role.CUSTOMER;
@@ -79,7 +81,28 @@ public class User implements Serializable {
         return role == Role.ADMIN;
     }
 
+    public Long getAssignedHotelId() { return assignedHotelId; }
+    public void setAssignedHotelId(Long assignedHotelId) { this.assignedHotelId = assignedHotelId; }
+
+    public String getAssignedHotelName() { return assignedHotelName; }
+    public void setAssignedHotelName(String assignedHotelName) { this.assignedHotelName = assignedHotelName; }
+
+    public boolean isSuperAdmin() {
+        return role == Role.ADMIN && assignedHotelId == null;
+    }
+
+    public boolean isHotelAdmin() {
+        return role == Role.ADMIN && assignedHotelId != null;
+    }
+
     public boolean isStaff() {
         return role == Role.STAFF || role == Role.ADMIN;
     }
+
+    // JavaBean getter aliases for JSP EL compatibility
+    public boolean getSuperAdmin() { return isSuperAdmin(); }
+    public boolean getHotelAdmin() { return isHotelAdmin(); }
+    public boolean getStaff() { return isStaff(); }
+    public boolean getAdmin() { return isAdmin(); }
+    public boolean getActive() { return isActive(); }
 }

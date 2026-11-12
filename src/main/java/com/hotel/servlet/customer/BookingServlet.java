@@ -1,9 +1,14 @@
 package com.hotel.servlet.customer;
 
 import com.hotel.model.Booking;
+import com.hotel.model.Hotel;
+import com.hotel.model.Invoice;
 import com.hotel.model.Room;
 import com.hotel.model.User;
+import com.hotel.service.BillingService;
 import com.hotel.service.BookingService;
+import com.hotel.service.CouponService;
+import com.hotel.service.HotelService;
 import com.hotel.service.RoomService;
 import com.hotel.util.DateUtil;
 import jakarta.servlet.ServletException;
@@ -24,6 +29,9 @@ public class BookingServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(BookingServlet.class);
     private final RoomService roomService = new RoomService();
     private final BookingService bookingService = new BookingService();
+    private final BillingService billingService = new BillingService();
+    private final HotelService hotelService = new HotelService();
+    private final CouponService couponService = new CouponService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -57,8 +65,10 @@ public class BookingServlet extends HttpServlet {
             }
 
             BookingService.PriceBreakdown pricing = bookingService.calculatePricing(room.getPricePerNight(), checkIn, checkOut);
+            Hotel hotel = (room.getHotelId() != null) ? hotelService.getHotelById(room.getHotelId()) : null;
 
             req.setAttribute("room", room);
+            req.setAttribute("hotel", hotel);
             req.setAttribute("checkIn", DateUtil.formatDate(checkIn));
             req.setAttribute("checkOut", DateUtil.formatDate(checkOut));
             req.setAttribute("guests", guests);
@@ -85,12 +95,30 @@ public class BookingServlet extends HttpServlet {
         String guestEmail = req.getParameter("guestEmail");
         String guestPhone = req.getParameter("guestPhone");
         String specialRequests = req.getParameter("specialRequests");
+        String couponCode = req.getParameter("couponCode");
+        String paymentOption = req.getParameter("paymentOption");
 
         try {
             Long roomId = Long.parseLong(roomIdStr.trim());
             LocalDate checkIn = DateUtil.parseDate(checkInStr);
             LocalDate checkOut = DateUtil.parseDate(checkOutStr);
             int numGuests = Integer.parseInt(guestsStr.trim());
+
+            Room room = roomService.getRoomById(roomId);
+            if (room == null) throw new IllegalArgumentException("Selected room not found.");
+
+            BookingService.PriceBreakdown pricing = bookingService.calculatePricing(room.getPricePerNight(), checkIn, checkOut);
+
+            java.math.BigDecimal discountAmount = java.math.BigDecimal.ZERO;
+            if (couponCode != null && !couponCode.trim().isEmpty()) {
+                CouponService.CouponValidationResult couponResult = couponService.validateCoupon(couponCode.trim(), pricing.baseAmount);
+                if (couponResult.isValid()) {
+                    discountAmount = couponResult.getDiscountAmount();
+                    if (couponResult.getCoupon() != null) {
+                        couponService.applyCouponUsage(couponResult.getCoupon().getId());
+                    }
+                }
+            }
 
             Booking booking = bookingService.createReservation(
                     currentUser.getId(),
@@ -102,11 +130,25 @@ public class BookingServlet extends HttpServlet {
                     guestEmail,
                     guestPhone,
                     specialRequests,
-                    req.getRemoteAddr()
+                    req.getRemoteAddr(),
+                    discountAmount,
+                    couponCode
             );
 
             logger.info("Booking created successfully: {}", booking.getBookingReference());
-            resp.sendRedirect(req.getContextPath() + "/customer/booking-details?ref=" + booking.getBookingReference() + "&confirmed=true");
+
+            if ("DEMO".equalsIgnoreCase(paymentOption)) {
+                Invoice invoice = billingService.getInvoiceByBookingId(booking.getId());
+                if (invoice != null) {
+                    resp.sendRedirect(req.getContextPath() + "/customer/payment?invoiceId=" + invoice.getId() + "&bookingRef=" + booking.getBookingReference());
+                } else {
+                    resp.sendRedirect(req.getContextPath() + "/customer/booking-details?ref=" + booking.getBookingReference() + "&confirmed=true");
+                }
+            } else if ("RAZORPAY".equalsIgnoreCase(paymentOption)) {
+                resp.sendRedirect(req.getContextPath() + "/payment/razorpay?bookingId=" + booking.getId());
+            } else {
+                resp.sendRedirect(req.getContextPath() + "/customer/booking-details?ref=" + booking.getBookingReference() + "&confirmed=true");
+            }
 
         } catch (IllegalArgumentException | IllegalStateException e) {
             req.setAttribute("errorMessage", e.getMessage());

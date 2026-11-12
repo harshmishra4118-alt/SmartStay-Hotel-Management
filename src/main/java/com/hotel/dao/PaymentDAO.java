@@ -9,6 +9,12 @@ import java.util.List;
 
 public class PaymentDAO extends BaseDAO {
 
+    public Long create(Payment payment) throws SQLException {
+        try (Connection conn = getConnection()) {
+            return create(payment, conn);
+        }
+    }
+
     public Long create(Payment payment, Connection conn) throws SQLException {
         String sql = "INSERT INTO payments " +
                      "(payment_reference, invoice_id, booking_id, amount, payment_method, payment_status, " +

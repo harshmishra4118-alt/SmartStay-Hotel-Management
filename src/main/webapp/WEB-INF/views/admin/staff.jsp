@@ -41,6 +41,7 @@
                             <tr>
                                 <th>Employee Code</th>
                                 <th>Full Name</th>
+                                <th>Assigned Property</th>
                                 <th>Email Address</th>
                                 <th>Contact Phone</th>
                                 <th>Department</th>
@@ -56,6 +57,12 @@
                                     </td>
                                     <td>
                                         <strong class="text-navy">${s.userFullName}</strong>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-light text-navy border">
+                                            <i class="bi bi-buildings text-gold me-1"></i>
+                                            ${not empty s.assignedHotelName ? s.assignedHotelName : 'SmartStay Platform'}
+                                        </span>
                                     </td>
                                     <td>${s.userEmail}</td>
                                     <td>${s.userPhone != null ? s.userPhone : '<span class="text-muted">N/A</span>'}</td>
@@ -91,6 +98,22 @@
                 <input type="hidden" name="action" value="create">
 
                 <div class="modal-body p-4">
+                    <c:choose>
+                        <c:when test="${not empty scopedHotelId}">
+                            <input type="hidden" name="hotelId" value="${scopedHotelId}">
+                        </c:when>
+                        <c:otherwise>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-secondary text-uppercase">Assigned Hotel Property</label>
+                                <select name="hotelId" class="form-select" required>
+                                    <c:forEach var="h" items="${allHotels}">
+                                        <option value="${h.id}">${h.name} (${h.city})</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
                             <label class="form-label small fw-bold text-secondary text-uppercase">Full Name</label>

@@ -25,10 +25,12 @@ public class StaffDetail implements Serializable {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // Joined user details for easy display
+    // Joined user & hotel details for easy display
     private String userFullName;
     private String userEmail;
     private String userPhone;
+    private Long assignedHotelId;
+    private String assignedHotelName;
 
     public StaffDetail() {}
 
@@ -67,4 +69,10 @@ public class StaffDetail implements Serializable {
 
     public String getUserPhone() { return userPhone; }
     public void setUserPhone(String userPhone) { this.userPhone = userPhone; }
+
+    public Long getAssignedHotelId() { return assignedHotelId; }
+    public void setAssignedHotelId(Long assignedHotelId) { this.assignedHotelId = assignedHotelId; }
+
+    public String getAssignedHotelName() { return assignedHotelName; }
+    public void setAssignedHotelName(String assignedHotelName) { this.assignedHotelName = assignedHotelName; }
 }

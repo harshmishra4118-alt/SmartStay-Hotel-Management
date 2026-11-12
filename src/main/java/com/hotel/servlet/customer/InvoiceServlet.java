@@ -46,6 +46,11 @@ public class InvoiceServlet extends HttpServlet {
                 return;
             }
 
+            if ("pdf".equalsIgnoreCase(req.getParameter("format")) || "true".equalsIgnoreCase(req.getParameter("download"))) {
+                resp.sendRedirect(req.getContextPath() + "/customer/invoice/pdf?invoiceId=" + invoice.getId());
+                return;
+            }
+
             // Security: verify customer ownership or staff
             if (!currentUser.isStaff() && !invoice.getUserId().equals(currentUser.getId())) {
                 resp.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied to invoice.");

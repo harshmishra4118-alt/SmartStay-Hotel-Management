@@ -19,7 +19,15 @@ public class RoomService {
                                   Room.HousekeepingStatus housekeepingFilter,
                                   Room.RoomType typeFilter,
                                   String search) throws SQLException {
-        return roomDAO.listAllRooms(operationalFilter, housekeepingFilter, typeFilter, search);
+        return roomDAO.listAllRooms(null, operationalFilter, housekeepingFilter, typeFilter, search);
+    }
+
+    public List<Room> getAllRooms(Long hotelId,
+                                  Room.OperationalStatus operationalFilter,
+                                  Room.HousekeepingStatus housekeepingFilter,
+                                  Room.RoomType typeFilter,
+                                  String search) throws SQLException {
+        return roomDAO.listAllRooms(hotelId, operationalFilter, housekeepingFilter, typeFilter, search);
     }
 
     public List<Room> searchAvailableRooms(LocalDate checkIn, LocalDate checkOut,

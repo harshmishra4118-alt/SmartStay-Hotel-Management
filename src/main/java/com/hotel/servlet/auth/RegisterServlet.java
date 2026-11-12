@@ -13,8 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
-@WebServlet(name = "RegisterServlet", urlPatterns = {"/register"})
+@WebServlet(name = "RegisterServlet", urlPatterns = { "/register" })
 public class RegisterServlet extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(RegisterServlet.class);
@@ -52,7 +53,8 @@ public class RegisterServlet extends HttpServlet {
 
             // Auto-login upon successful registration
             HttpSession oldSession = req.getSession(false);
-            if (oldSession != null) oldSession.invalidate();
+            if (oldSession != null)
+                oldSession.invalidate();
             HttpSession newSession = req.getSession(true);
             newSession.setAttribute("currentUser", user);
             CsrfUtil.getOrCreateToken(newSession);
@@ -66,9 +68,20 @@ public class RegisterServlet extends HttpServlet {
             req.setAttribute("email", email);
             req.setAttribute("phone", phone);
             req.getRequestDispatcher("/WEB-INF/views/auth/register.jsp").forward(req, resp);
+        } catch (SQLException e) {
+            logger.error("Database error during registration for email: {}", email, e);
+            String dbMsg = "Database error: " + (e.getMessage() != null ? e.getMessage()
+                    : "Unable to complete registration due to database connectivity issue.");
+            req.setAttribute("errorMessage", dbMsg);
+            req.setAttribute("fullName", fullName);
+            req.setAttribute("email", email);
+            req.setAttribute("phone", phone);
+            req.getRequestDispatcher("/WEB-INF/views/auth/register.jsp").forward(req, resp);
         } catch (Exception e) {
-            logger.error("Registration error", e);
-            req.setAttribute("errorMessage", "An unexpected error occurred during account creation. Please try again.");
+            logger.error("Registration error for email: {}", email, e);
+            String detail = (e.getMessage() != null && !e.getMessage().isBlank()) ? e.getMessage()
+                    : "Please check your information and try again.";
+            req.setAttribute("errorMessage", "Registration failed: " + detail);
             req.setAttribute("fullName", fullName);
             req.setAttribute("email", email);
             req.setAttribute("phone", phone);

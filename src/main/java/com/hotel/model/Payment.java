@@ -8,6 +8,7 @@ public class Payment implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public enum PaymentMethod {
+        RAZORPAY("Razorpay Online Gateway"),
         CREDIT_CARD_DEMO("Demo Credit Card"),
         DEBIT_CARD_DEMO("Demo Debit Card"),
         UPI_DEMO("Demo UPI / QR"),

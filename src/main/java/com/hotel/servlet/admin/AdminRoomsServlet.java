@@ -2,6 +2,7 @@ package com.hotel.servlet.admin;
 
 import com.hotel.model.Room;
 import com.hotel.model.User;
+import com.hotel.service.HotelService;
 import com.hotel.service.RoomService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -21,16 +22,22 @@ public class AdminRoomsServlet extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(AdminRoomsServlet.class);
     private final RoomService roomService = new RoomService();
+    private final HotelService hotelService = new HotelService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String servletPath = req.getServletPath();
+        HttpSession session = req.getSession(false);
+        User currentUser = session != null ? (User) session.getAttribute("currentUser") : null;
+        Long scopedHotelId = (currentUser != null && currentUser.isHotelAdmin()) ? currentUser.getAssignedHotelId() : null;
 
         try {
             if ("/admin/rooms/add".equals(servletPath)) {
                 req.setAttribute("allRoomTypes", Room.RoomType.values());
                 req.setAttribute("allOperationalStatuses", Room.OperationalStatus.values());
                 req.setAttribute("allHousekeepingStatuses", Room.HousekeepingStatus.values());
+                req.setAttribute("allHotels", hotelService.getAllHotels());
+                req.setAttribute("scopedHotelId", scopedHotelId);
                 req.getRequestDispatcher("/WEB-INF/views/admin/room-form.jsp").forward(req, resp);
                 return;
             }
@@ -42,6 +49,8 @@ public class AdminRoomsServlet extends HttpServlet {
                 req.setAttribute("allRoomTypes", Room.RoomType.values());
                 req.setAttribute("allOperationalStatuses", Room.OperationalStatus.values());
                 req.setAttribute("allHousekeepingStatuses", Room.HousekeepingStatus.values());
+                req.setAttribute("allHotels", hotelService.getAllHotels());
+                req.setAttribute("scopedHotelId", scopedHotelId);
                 req.getRequestDispatcher("/WEB-INF/views/admin/room-form.jsp").forward(req, resp);
                 return;
             }
@@ -51,6 +60,11 @@ public class AdminRoomsServlet extends HttpServlet {
             String hkFilter = req.getParameter("housekeeping");
             String typeFilter = req.getParameter("type");
             String search = req.getParameter("search");
+            String hotelParam = req.getParameter("hotelId");
+
+            if (scopedHotelId == null && hotelParam != null && !hotelParam.trim().isEmpty()) {
+                try { scopedHotelId = Long.parseLong(hotelParam.trim()); } catch (Exception ignored) {}
+            }
 
             Room.OperationalStatus opStatus = null;
             if (opFilter != null && !opFilter.trim().isEmpty()) {
@@ -67,11 +81,13 @@ public class AdminRoomsServlet extends HttpServlet {
                 try { rType = Room.RoomType.valueOf(typeFilter.trim()); } catch (Exception ignored) {}
             }
 
-            List<Room> rooms = roomService.getAllRooms(opStatus, hkStatus, rType, search);
+            List<Room> rooms = roomService.getAllRooms(scopedHotelId, opStatus, hkStatus, rType, search);
             req.setAttribute("rooms", rooms);
             req.setAttribute("allRoomTypes", Room.RoomType.values());
             req.setAttribute("allOperationalStatuses", Room.OperationalStatus.values());
             req.setAttribute("allHousekeepingStatuses", Room.HousekeepingStatus.values());
+            req.setAttribute("allHotels", hotelService.getAllHotels());
+            req.setAttribute("selectedHotelId", scopedHotelId);
 
             req.getRequestDispatcher("/WEB-INF/views/admin/rooms.jsp").forward(req, resp);
 
@@ -129,6 +145,17 @@ public class AdminRoomsServlet extends HttpServlet {
             room.setHousekeepingStatus(Room.HousekeepingStatus.valueOf(housekeeping));
             room.setPrimaryImageUrl(primaryImage != null && !primaryImage.trim().isEmpty() ? primaryImage.trim() : "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1200&q=80");
             room.setAmenities(amenities);
+
+            Long hotelId = 1L;
+            if (currentAdmin != null && currentAdmin.isHotelAdmin()) {
+                hotelId = currentAdmin.getAssignedHotelId();
+            } else {
+                String hotelIdParam = req.getParameter("hotelId");
+                if (hotelIdParam != null && !hotelIdParam.trim().isEmpty()) {
+                    try { hotelId = Long.parseLong(hotelIdParam.trim()); } catch (Exception ignored) {}
+                }
+            }
+            room.setHotelId(hotelId);
 
             if (room.getId() == null) {
                 roomService.createRoom(room, currentAdmin.getId(), req.getRemoteAddr());

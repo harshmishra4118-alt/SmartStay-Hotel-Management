@@ -7,6 +7,7 @@ import com.hotel.dao.InvoiceDAO;
 import com.hotel.dao.NotificationDAO;
 import com.hotel.dao.RoomDAO;
 import com.hotel.model.Booking;
+import com.hotel.model.Hotel;
 import com.hotel.model.Invoice;
 import com.hotel.model.Notification;
 import com.hotel.model.Room;
@@ -35,6 +36,8 @@ public class BookingService {
     private final InvoiceDAO invoiceDAO = new InvoiceDAO();
     private final NotificationDAO notificationDAO = new NotificationDAO();
     private final AuditLogDAO auditLogDAO = new AuditLogDAO();
+    private final EmailService emailService = new EmailService();
+    private final RazorpayPaymentService paymentService = new RazorpayPaymentService();
 
     public static class PriceBreakdown {
         public int nights;
@@ -42,6 +45,21 @@ public class BookingService {
         public BigDecimal baseAmount;
         public BigDecimal taxAmount;
         public BigDecimal totalAmount;
+
+        public int getNights() { return nights; }
+        public void setNights(int nights) { this.nights = nights; }
+
+        public BigDecimal getPricePerNight() { return pricePerNight; }
+        public void setPricePerNight(BigDecimal pricePerNight) { this.pricePerNight = pricePerNight; }
+
+        public BigDecimal getBaseAmount() { return baseAmount; }
+        public void setBaseAmount(BigDecimal baseAmount) { this.baseAmount = baseAmount; }
+
+        public BigDecimal getTaxAmount() { return taxAmount; }
+        public void setTaxAmount(BigDecimal taxAmount) { this.taxAmount = taxAmount; }
+
+        public BigDecimal getTotalAmount() { return totalAmount; }
+        public void setTotalAmount(BigDecimal totalAmount) { this.totalAmount = totalAmount; }
     }
 
     public PriceBreakdown calculatePricing(BigDecimal pricePerNight, LocalDate checkIn, LocalDate checkOut) {
@@ -68,6 +86,14 @@ public class BookingService {
     public Booking createReservation(Long userId, Long roomId, LocalDate checkIn, LocalDate checkOut,
                                      int numGuests, String guestName, String guestEmail, String guestPhone,
                                      String specialRequests, String clientIp) throws Exception {
+        return createReservation(userId, roomId, checkIn, checkOut, numGuests, guestName, guestEmail, guestPhone,
+                specialRequests, clientIp, BigDecimal.ZERO, null);
+    }
+
+    public Booking createReservation(Long userId, Long roomId, LocalDate checkIn, LocalDate checkOut,
+                                     int numGuests, String guestName, String guestEmail, String guestPhone,
+                                     String specialRequests, String clientIp,
+                                     BigDecimal discountAmount, String couponCode) throws Exception {
 
         if (!ValidationUtil.isValidDateRange(checkIn, checkOut)) {
             throw new IllegalArgumentException("Invalid reservation dates. Check-in must be today or future date.");
@@ -92,9 +118,20 @@ public class BookingService {
 
         PriceBreakdown pricing = calculatePricing(room.getPricePerNight(), checkIn, checkOut);
 
+        BigDecimal effectiveDiscount = (discountAmount != null && discountAmount.compareTo(BigDecimal.ZERO) > 0)
+                ? discountAmount : BigDecimal.ZERO;
+        if (effectiveDiscount.compareTo(pricing.baseAmount) > 0) {
+            effectiveDiscount = pricing.baseAmount;
+        }
+
+        BigDecimal discountedBase = pricing.baseAmount.subtract(effectiveDiscount);
+        BigDecimal effectiveTax = discountedBase.multiply(TAX_RATE).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal finalPayable = discountedBase.add(effectiveTax).setScale(2, RoundingMode.HALF_UP);
+
         Booking booking = new Booking();
         booking.setBookingReference(generateBookingReference());
         booking.setUserId(userId);
+        booking.setHotelId(room.getHotelId() != null ? room.getHotelId() : 1L);
         booking.setRoomId(roomId);
         booking.setCheckInDate(checkIn);
         booking.setCheckOutDate(checkOut);
@@ -105,8 +142,8 @@ public class BookingService {
         booking.setGuestPhone(guestPhone.trim());
         booking.setRoomPricePerNight(pricing.pricePerNight);
         booking.setBaseAmount(pricing.baseAmount);
-        booking.setTaxAmount(pricing.taxAmount);
-        booking.setTotalAmount(pricing.totalAmount);
+        booking.setTaxAmount(effectiveTax);
+        booking.setTotalAmount(finalPayable);
         booking.setBookingStatus(Booking.BookingStatus.CONFIRMED);
         booking.setSpecialRequests(specialRequests);
 
@@ -132,11 +169,15 @@ public class BookingService {
             invoice.setUserId(userId);
             invoice.setSubtotalAmount(pricing.baseAmount);
             invoice.setTaxRate(new BigDecimal("12.00"));
-            invoice.setTaxAmount(pricing.taxAmount);
-            invoice.setDiscountAmount(BigDecimal.ZERO);
-            invoice.setTotalPayable(pricing.totalAmount);
+            invoice.setTaxAmount(effectiveTax);
+            invoice.setDiscountAmount(effectiveDiscount);
+            invoice.setTotalPayable(finalPayable);
             invoice.setPaymentStatus(Invoice.PaymentStatus.UNPAID);
-            invoice.setNotes("Reservation invoice for " + room.getName() + " (" + pricing.nights + " nights)");
+            String note = "Reservation for " + room.getName() + " (" + pricing.nights + " nights)";
+            if (couponCode != null && !couponCode.trim().isEmpty()) {
+                note += " [Coupon: " + couponCode.trim().toUpperCase() + ", Discount: Rs " + effectiveDiscount + "]";
+            }
+            invoice.setNotes(note);
 
             invoiceDAO.create(invoice, conn);
 
@@ -152,6 +193,15 @@ public class BookingService {
             if (conn != null) {
                 try { conn.setAutoCommit(true); conn.close(); } catch (SQLException ex) { logger.warn("Failed to close connection", ex); }
             }
+        }
+
+        // Send confirmation email via Gmail SMTP
+        try {
+            com.hotel.dao.HotelDAO hotelDAO = new com.hotel.dao.HotelDAO();
+            Hotel hotel = hotelDAO.findById(booking.getHotelId());
+            emailService.sendBookingConfirmation(booking.getGuestEmail(), booking, hotel, room);
+        } catch (Exception e) {
+            logger.warn("Could not send confirmation email: {}", e.getMessage());
         }
 
         // Send confirmation notification
@@ -204,6 +254,11 @@ public class BookingService {
                 Invoice invoice = invoiceDAO.findByBookingId(bookingId);
                 if (invoice != null && invoice.getPaymentStatus() == Invoice.PaymentStatus.PAID) {
                     invoiceDAO.updatePaymentStatus(invoice.getId(), Invoice.PaymentStatus.REFUNDED, conn);
+                    try {
+                        paymentService.processRefund(bookingId, invoice.getTotalPayable(), reason);
+                    } catch (Exception ex) {
+                        logger.warn("Could not process online refund record: {}", ex.getMessage());
+                    }
                 }
 
                 conn.commit();
@@ -234,16 +289,43 @@ public class BookingService {
         return bookingDAO.findByReference(reference);
     }
 
+    public List<Booking> getBookingsByHotel(Long hotelId, String status, String search) throws SQLException {
+        if (hotelId == null) {
+            return listAllBookings(null, null, search, 0, 100);
+        }
+        return bookingDAO.findByHotelId(hotelId, status, search);
+    }
+
+    public int getHotelTodayArrivals(Long hotelId) throws SQLException {
+        return bookingDAO.countTodayArrivals(hotelId);
+    }
+
+    public int getHotelTodayDepartures(Long hotelId) throws SQLException {
+        return bookingDAO.countTodayDepartures(hotelId);
+    }
+
+    public int getHotelActiveGuests(Long hotelId) throws SQLException {
+        return bookingDAO.countActiveGuests(hotelId);
+    }
+
     public List<Booking> getBookingsByUser(Long userId) throws SQLException {
         return bookingDAO.listByUser(userId);
     }
 
     public List<Booking> listAllBookings(Booking.BookingStatus status, LocalDate date, String search, int offset, int limit) throws SQLException {
-        return bookingDAO.listAll(status, date, search, offset, limit);
+        return bookingDAO.listAll(null, status, date, search, offset, limit);
+    }
+
+    public List<Booking> listAllBookings(Long hotelId, Booking.BookingStatus status, LocalDate date, String search, int offset, int limit) throws SQLException {
+        return bookingDAO.listAll(hotelId, status, date, search, offset, limit);
     }
 
     public int countAllBookings(Booking.BookingStatus status, LocalDate date, String search) throws SQLException {
-        return bookingDAO.countAll(status, date, search);
+        return bookingDAO.countAll(null, status, date, search);
+    }
+
+    public int countAllBookings(Long hotelId, Booking.BookingStatus status, LocalDate date, String search) throws SQLException {
+        return bookingDAO.countAll(hotelId, status, date, search);
     }
 
     private String generateBookingReference() {

@@ -132,4 +132,17 @@ public class Invoice implements Serializable {
         return due.compareTo(BigDecimal.ZERO) > 0 ? due : BigDecimal.ZERO;
     }
     public void setBalanceDue(BigDecimal balanceDue) { this.balanceDue = balanceDue; }
+
+    public boolean hasDiscount() {
+        return discountAmount != null && discountAmount.compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    public boolean isHasDiscount() {
+        return hasDiscount();
+    }
+
+    public String getFormattedIssueDate() {
+        if (issueDate == null) return "";
+        return issueDate.format(java.time.format.DateTimeFormatter.ofPattern("dd MMM yyyy"));
+    }
 }

@@ -27,6 +27,16 @@
     <div class="sidebar-heading">Hotel Operations</div>
     <ul class="nav flex-column mb-3">
         <li class="nav-item">
+            <a class="nav-link ${pageContext.request.servletPath.startsWith('/admin/hotels') ? 'active' : ''}" href="${pageContext.request.contextPath}/admin/hotels">
+                <i class="bi bi-buildings"></i> Hotel Properties
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link ${pageContext.request.servletPath.startsWith('/admin/hotel-gallery') ? 'active' : ''}" href="${pageContext.request.contextPath}/admin/hotel-gallery">
+                <i class="bi bi-images"></i> Photo Gallery
+            </a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link ${pageContext.request.servletPath.startsWith('/admin/rooms') ? 'active' : ''}" href="${pageContext.request.contextPath}/admin/rooms">
                 <i class="bi bi-door-open"></i> Room Inventory
             </a>

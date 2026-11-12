@@ -9,9 +9,11 @@ import java.util.List;
 public class StaffDetailDAO extends BaseDAO {
 
     public StaffDetail findByUserId(Long userId) throws SQLException {
-        String sql = "SELECT s.*, u.full_name, u.email, u.phone " +
+        String sql = "SELECT s.*, u.full_name, u.email, u.phone, hsa.hotel_id, h.name AS hotel_name " +
                      "FROM staff_details s " +
                      "JOIN users u ON s.user_id = u.id " +
+                     "LEFT JOIN hotel_staff_assignments hsa ON s.user_id = hsa.user_id " +
+                     "LEFT JOIN hotels h ON hsa.hotel_id = h.id " +
                      "WHERE s.user_id = ?";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -26,9 +28,11 @@ public class StaffDetailDAO extends BaseDAO {
     }
 
     public List<StaffDetail> listAllStaff() throws SQLException {
-        String sql = "SELECT s.*, u.full_name, u.email, u.phone " +
+        String sql = "SELECT s.*, u.full_name, u.email, u.phone, hsa.hotel_id, h.name AS hotel_name " +
                      "FROM staff_details s " +
                      "JOIN users u ON s.user_id = u.id " +
+                     "LEFT JOIN hotel_staff_assignments hsa ON s.user_id = hsa.user_id " +
+                     "LEFT JOIN hotels h ON hsa.hotel_id = h.id " +
                      "ORDER BY s.id DESC";
         List<StaffDetail> list = new ArrayList<>();
         try (Connection conn = getConnection();
@@ -36,6 +40,30 @@ public class StaffDetailDAO extends BaseDAO {
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 list.add(mapRow(rs));
+            }
+        }
+        return list;
+    }
+
+    public List<StaffDetail> listStaffByHotel(Long hotelId) throws SQLException {
+        if (hotelId == null) {
+            return listAllStaff();
+        }
+        String sql = "SELECT s.*, u.full_name, u.email, u.phone, hsa.hotel_id, h.name AS hotel_name " +
+                     "FROM staff_details s " +
+                     "JOIN users u ON s.user_id = u.id " +
+                     "JOIN hotel_staff_assignments hsa ON s.user_id = hsa.user_id " +
+                     "JOIN hotels h ON hsa.hotel_id = h.id " +
+                     "WHERE hsa.hotel_id = ? " +
+                     "ORDER BY s.id DESC";
+        List<StaffDetail> list = new ArrayList<>();
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, hotelId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapRow(rs));
+                }
             }
         }
         return list;
@@ -85,6 +113,17 @@ public class StaffDetailDAO extends BaseDAO {
         s.setUserFullName(rs.getString("full_name"));
         s.setUserEmail(rs.getString("email"));
         s.setUserPhone(rs.getString("phone"));
+
+        try {
+            long hId = rs.getLong("hotel_id");
+            if (!rs.wasNull()) {
+                s.setAssignedHotelId(hId);
+            }
+        } catch (SQLException ignored) {}
+
+        try {
+            s.setAssignedHotelName(rs.getString("hotel_name"));
+        } catch (SQLException ignored) {}
 
         return s;
     }

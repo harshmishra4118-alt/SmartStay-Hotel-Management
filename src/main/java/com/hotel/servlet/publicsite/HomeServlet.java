@@ -1,7 +1,9 @@
 package com.hotel.servlet.publicsite;
 
+import com.hotel.model.Hotel;
 import com.hotel.model.Room;
 import com.hotel.service.FeedbackService;
+import com.hotel.service.HotelService;
 import com.hotel.service.RoomService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,11 +22,17 @@ public class HomeServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(HomeServlet.class);
     private final RoomService roomService = new RoomService();
     private final FeedbackService feedbackService = new FeedbackService();
+    private final HotelService hotelService = new HotelService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            List<Room> featuredRooms = roomService.getFeaturedRooms(3);
+            List<Hotel> featuredHotels = hotelService.getAllActiveHotels();
+            List<String> cities = hotelService.getAvailableCities();
+            List<Room> featuredRooms = roomService.getFeaturedRooms(4);
+
+            req.setAttribute("featuredHotels", featuredHotels);
+            req.setAttribute("cities", cities);
             req.setAttribute("featuredRooms", featuredRooms);
             req.setAttribute("feedbacks", feedbackService.listAllFeedback(true, 0, 3));
         } catch (Exception e) {

@@ -25,6 +25,15 @@ public class AdminBookingsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession(false);
+        User currentAdmin = session != null ? (User) session.getAttribute("currentUser") : null;
+        Long scopedHotelId = (currentAdmin != null && currentAdmin.isHotelAdmin()) ? currentAdmin.getAssignedHotelId() : null;
+
+        String hotelParam = req.getParameter("hotelId");
+        if (scopedHotelId == null && hotelParam != null && !hotelParam.trim().isEmpty()) {
+            try { scopedHotelId = Long.parseLong(hotelParam.trim()); } catch (Exception ignored) {}
+        }
+
         String statusStr = req.getParameter("status");
         String dateStr = req.getParameter("date");
         String search = req.getParameter("search");
@@ -45,8 +54,8 @@ public class AdminBookingsServlet extends HttpServlet {
         int offset = (page - 1) * pageSize;
 
         try {
-            List<Booking> bookings = bookingService.listAllBookings(status, date, search, offset, pageSize);
-            int total = bookingService.countAllBookings(status, date, search);
+            List<Booking> bookings = bookingService.listAllBookings(scopedHotelId, status, date, search, offset, pageSize);
+            int total = bookingService.countAllBookings(scopedHotelId, status, date, search);
             int totalPages = (int) Math.ceil((double) total / pageSize);
 
             req.setAttribute("bookings", bookings);
@@ -57,6 +66,8 @@ public class AdminBookingsServlet extends HttpServlet {
             req.setAttribute("selectedDate", dateStr);
             req.setAttribute("search", search);
             req.setAttribute("allStatuses", Booking.BookingStatus.values());
+            req.setAttribute("selectedHotelId", scopedHotelId);
+            req.setAttribute("isOwnerScope", currentAdmin != null && currentAdmin.isHotelAdmin());
 
             req.getRequestDispatcher("/WEB-INF/views/admin/bookings.jsp").forward(req, resp);
 

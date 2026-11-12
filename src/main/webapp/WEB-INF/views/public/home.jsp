@@ -38,18 +38,29 @@
 <!-- Floating Booking Search Bar -->
 <div class="container">
     <div class="booking-search-card">
-        <form action="${pageContext.request.contextPath}/rooms" method="GET" class="row g-3 align-items-end">
+        <form action="${pageContext.request.contextPath}/hotels" method="GET" class="row g-3 align-items-end">
+            <div class="col-md-3 col-sm-6">
+                <label class="form-label small fw-bold text-uppercase text-secondary mb-1">
+                    <i class="bi bi-geo-alt-fill text-gold me-1"></i>Destination City
+                </label>
+                <select name="city" class="form-select">
+                    <option value="">All Luxury Destinations</option>
+                    <c:forEach var="c" items="${cities}">
+                        <option value="${c}">${c}</option>
+                    </c:forEach>
+                </select>
+            </div>
             <div class="col-md-3 col-sm-6">
                 <label class="form-label small fw-bold text-uppercase text-secondary mb-1">
                     <i class="bi bi-calendar-check text-gold me-1"></i>Check-In
                 </label>
-                <input type="date" name="checkIn" class="form-control" required>
+                <input type="date" name="checkIn" class="form-control">
             </div>
-            <div class="col-md-3 col-sm-6">
+            <div class="col-md-2 col-sm-6">
                 <label class="form-label small fw-bold text-uppercase text-secondary mb-1">
                     <i class="bi bi-calendar-x text-gold me-1"></i>Check-Out
                 </label>
-                <input type="date" name="checkOut" class="form-control" required>
+                <input type="date" name="checkOut" class="form-control">
             </div>
             <div class="col-md-2 col-sm-6">
                 <label class="form-label small fw-bold text-uppercase text-secondary mb-1">
@@ -60,30 +71,71 @@
                     <option value="2" selected>2 Guests</option>
                     <option value="3">3 Guests</option>
                     <option value="4">4 Guests</option>
-                    <option value="5">5+ Guests</option>
-                </select>
-            </div>
-            <div class="col-md-2 col-sm-6">
-                <label class="form-label small fw-bold text-uppercase text-secondary mb-1">
-                    <i class="bi bi-tag-fill text-gold me-1"></i>Suite Type
-                </label>
-                <select name="roomType" class="form-select">
-                    <option value="">All Suites</option>
-                    <option value="STANDARD">Standard</option>
-                    <option value="DELUXE">Deluxe</option>
-                    <option value="EXECUTIVE_SUITE">Executive</option>
-                    <option value="PRESIDENTIAL_SUITE">Presidential</option>
-                    <option value="FAMILY_STUDIO">Family Studio</option>
                 </select>
             </div>
             <div class="col-md-2 col-sm-12">
                 <button type="submit" class="btn btn-gold w-100 py-2">
-                    <i class="bi bi-search me-1"></i>Check Rates
+                    <i class="bi bi-search me-1"></i>Find Hotels
                 </button>
             </div>
         </form>
     </div>
 </div>
+
+<!-- Featured Luxury Hotels Across India -->
+<section class="py-5 my-4">
+    <div class="container">
+        <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
+            <div>
+                <span class="text-gold text-uppercase fw-bold small tracking-wider">Multi-Hotel Ecosystem</span>
+                <h2 class="font-serif text-navy display-6 mt-1 mb-0">Our Curated Luxury Escapes</h2>
+            </div>
+            <div class="mt-2 mt-sm-0">
+                <a href="${pageContext.request.contextPath}/hotels" class="btn btn-outline-navy btn-sm me-2">
+                    View All ${featuredHotels.size()} Properties
+                </a>
+                <a href="${pageContext.request.contextPath}/hotels/nearby" class="btn btn-navy btn-sm">
+                    <i class="bi bi-crosshair text-gold me-1"></i>Hotels Near Me
+                </a>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <c:forEach var="h" items="${featuredHotels}" begin="0" end="2">
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden hotel-card">
+                        <div class="position-relative">
+                            <img src="${h.primaryImageUrl}" alt="${h.name}" class="card-img-top" style="height: 230px; object-fit: cover;" />
+                            <div class="position-absolute top-0 start-0 m-3">
+                                <span class="badge bg-gold text-dark fw-bold">
+                                    <i class="bi bi-star-fill me-1"></i>${h.starRating}
+                                </span>
+                                <span class="badge bg-navy text-white ms-1">${h.city}</span>
+                            </div>
+                        </div>
+                        <div class="card-body p-4 d-flex flex-column">
+                            <h5 class="font-serif text-navy mb-1">${h.name}</h5>
+                            <p class="text-muted small mb-2 fst-italic">${h.tagline}</p>
+                            <p class="text-secondary small mb-3">
+                                <i class="bi bi-geo-alt-fill text-gold me-1"></i>${h.address}
+                            </p>
+                            <div class="pt-3 border-top mt-auto d-flex align-items-center justify-content-between">
+                                <div>
+                                    <small class="text-muted d-block" style="font-size: 0.7rem;">From</small>
+                                    <strong class="text-navy fs-5">Rs <fmt:formatNumber value="${h.minPrice}" maxFractionDigits="0" /></strong>
+                                    <small class="text-muted">/ night</small>
+                                </div>
+                                <a href="${pageContext.request.contextPath}/hotel?id=${h.id}" class="btn btn-gold btn-sm px-3 fw-semibold">
+                                    Explore & Book
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
+</section>
 
 <!-- Curated Experiences & Features -->
 <section class="py-5 my-5">

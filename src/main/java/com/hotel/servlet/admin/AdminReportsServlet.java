@@ -2,6 +2,7 @@ package com.hotel.servlet.admin;
 
 import com.hotel.dao.ReportDAO;
 import com.hotel.model.Booking;
+import com.hotel.model.User;
 import com.hotel.service.BookingService;
 import com.hotel.service.ReportService;
 import com.hotel.util.DateUtil;
@@ -10,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,20 +30,30 @@ public class AdminReportsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String servletPath = req.getServletPath();
+        HttpSession session = req.getSession(false);
+        User currentUser = session != null ? (User) session.getAttribute("currentUser") : null;
+        Long scopedHotelId = (currentUser != null && currentUser.isHotelAdmin()) ? currentUser.getAssignedHotelId() : null;
+
+        String hotelParam = req.getParameter("hotelId");
+        if (scopedHotelId == null && hotelParam != null && !hotelParam.trim().isEmpty()) {
+            try { scopedHotelId = Long.parseLong(hotelParam.trim()); } catch (Exception ignored) {}
+        }
 
         if ("/admin/reports/export-csv".equals(servletPath)) {
-            exportCsv(req, resp);
+            exportCsv(req, resp, scopedHotelId);
             return;
         }
 
         try {
-            ReportDAO.DashboardMetrics metrics = reportService.getDashboardMetrics();
-            Map<String, java.math.BigDecimal> monthlyRevenue = reportService.getMonthlyRevenueForYear(LocalDate.now().getYear());
-            List<Booking> bookings = bookingService.listAllBookings(null, null, null, 0, 50);
+            ReportDAO.DashboardMetrics metrics = reportService.getDashboardMetrics(scopedHotelId);
+            Map<String, java.math.BigDecimal> monthlyRevenue = reportService.getMonthlyRevenueForYear(LocalDate.now().getYear(), scopedHotelId);
+            List<Booking> bookings = bookingService.listAllBookings(scopedHotelId, null, null, null, 0, 50);
 
             req.setAttribute("metrics", metrics);
             req.setAttribute("monthlyRevenue", monthlyRevenue);
             req.setAttribute("bookings", bookings);
+            req.setAttribute("scopedHotelId", scopedHotelId);
+            req.setAttribute("isOwnerScope", currentUser != null && currentUser.isHotelAdmin());
 
             req.getRequestDispatcher("/WEB-INF/views/admin/reports.jsp").forward(req, resp);
 
@@ -51,7 +63,7 @@ public class AdminReportsServlet extends HttpServlet {
         }
     }
 
-    private void exportCsv(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void exportCsv(HttpServletRequest req, HttpServletResponse resp, Long scopedHotelId) throws IOException {
         String statusStr = req.getParameter("status");
         String dateStr = req.getParameter("date");
         String search = req.getParameter("search");
@@ -63,7 +75,7 @@ public class AdminReportsServlet extends HttpServlet {
         LocalDate date = DateUtil.parseDate(dateStr);
 
         try {
-            List<Booking> bookings = bookingService.listAllBookings(status, date, search, 0, 1000);
+            List<Booking> bookings = bookingService.listAllBookings(scopedHotelId, status, date, search, 0, 1000);
             String csvContent = reportService.exportBookingsToCsv(bookings);
 
             resp.setContentType("text/csv; charset=UTF-8");

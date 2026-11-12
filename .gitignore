@@ -44,3 +44,15 @@ Desktop.ini
 *.bak
 backups/*.zip
 *.zip
+
+# SmartStay security exclusions
+/portable/
+/database/backup_dump_*.sql
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+logs/
+*.log
+src/main/resources/db.properties

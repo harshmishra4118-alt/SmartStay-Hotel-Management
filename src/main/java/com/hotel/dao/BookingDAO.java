@@ -57,28 +57,29 @@ public class BookingDAO extends BaseDAO {
 
     public Long create(Booking booking, Connection conn) throws SQLException {
         String sql = "INSERT INTO bookings " +
-                     "(booking_reference, user_id, room_id, check_in_date, check_out_date, total_nights, num_guests, " +
+                     "(booking_reference, user_id, hotel_id, room_id, check_in_date, check_out_date, total_nights, num_guests, " +
                      "guest_name, guest_email, guest_phone, room_price_per_night, base_amount, tax_amount, total_amount, " +
                      "booking_status, special_requests, created_at, updated_at) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, booking.getBookingReference());
             stmt.setLong(2, booking.getUserId());
-            stmt.setLong(3, booking.getRoomId());
-            stmt.setDate(4, Date.valueOf(booking.getCheckInDate()));
-            stmt.setDate(5, Date.valueOf(booking.getCheckOutDate()));
-            stmt.setInt(6, booking.getTotalNights());
-            stmt.setInt(7, booking.getNumGuests());
-            stmt.setString(8, booking.getGuestName().trim());
-            stmt.setString(9, booking.getGuestEmail().trim());
-            stmt.setString(10, booking.getGuestPhone().trim());
-            stmt.setBigDecimal(11, booking.getRoomPricePerNight());
-            stmt.setBigDecimal(12, booking.getBaseAmount());
-            stmt.setBigDecimal(13, booking.getTaxAmount());
-            stmt.setBigDecimal(14, booking.getTotalAmount());
-            stmt.setString(15, booking.getBookingStatus().name());
-            stmt.setString(16, booking.getSpecialRequests());
+            stmt.setLong(3, booking.getHotelId() != null ? booking.getHotelId() : 1L);
+            stmt.setLong(4, booking.getRoomId());
+            stmt.setDate(5, Date.valueOf(booking.getCheckInDate()));
+            stmt.setDate(6, Date.valueOf(booking.getCheckOutDate()));
+            stmt.setInt(7, booking.getTotalNights());
+            stmt.setInt(8, booking.getNumGuests());
+            stmt.setString(9, booking.getGuestName().trim());
+            stmt.setString(10, booking.getGuestEmail().trim());
+            stmt.setString(11, booking.getGuestPhone().trim());
+            stmt.setBigDecimal(12, booking.getRoomPricePerNight());
+            stmt.setBigDecimal(13, booking.getBaseAmount());
+            stmt.setBigDecimal(14, booking.getTaxAmount());
+            stmt.setBigDecimal(15, booking.getTotalAmount());
+            stmt.setString(16, booking.getBookingStatus().name());
+            stmt.setString(17, booking.getSpecialRequests());
 
             stmt.executeUpdate();
             try (ResultSet rs = stmt.getGeneratedKeys()) {
@@ -136,10 +137,18 @@ public class BookingDAO extends BaseDAO {
     }
 
     public List<Booking> listAll(Booking.BookingStatus statusFilter, LocalDate dateFilter, String search, int offset, int limit) throws SQLException {
+        return listAll(null, statusFilter, dateFilter, search, offset, limit);
+    }
+
+    public List<Booking> listAll(Long hotelId, Booking.BookingStatus statusFilter, LocalDate dateFilter, String search, int offset, int limit) throws SQLException {
         StringBuilder sql = new StringBuilder(getJoinedBookingSql());
         sql.append("WHERE 1=1 ");
         List<Object> params = new ArrayList<>();
 
+        if (hotelId != null) {
+            sql.append("AND b.hotel_id = ? ");
+            params.add(hotelId);
+        }
         if (statusFilter != null) {
             sql.append("AND b.booking_status = ? ");
             params.add(statusFilter.name());
@@ -178,6 +187,10 @@ public class BookingDAO extends BaseDAO {
     }
 
     public int countAll(Booking.BookingStatus statusFilter, LocalDate dateFilter, String search) throws SQLException {
+        return countAll(null, statusFilter, dateFilter, search);
+    }
+
+    public int countAll(Long hotelId, Booking.BookingStatus statusFilter, LocalDate dateFilter, String search) throws SQLException {
         StringBuilder sql = new StringBuilder(
                 "SELECT COUNT(*) FROM bookings b " +
                 "LEFT JOIN rooms r ON b.room_id = r.id " +
@@ -185,6 +198,10 @@ public class BookingDAO extends BaseDAO {
         );
         List<Object> params = new ArrayList<>();
 
+        if (hotelId != null) {
+            sql.append("AND b.hotel_id = ? ");
+            params.add(hotelId);
+        }
         if (statusFilter != null) {
             sql.append("AND b.booking_status = ? ");
             params.add(statusFilter.name());
@@ -213,6 +230,12 @@ public class BookingDAO extends BaseDAO {
             }
         }
         return 0;
+    }
+
+    public boolean updateStatus(Long id, Booking.BookingStatus status) throws SQLException {
+        try (Connection conn = getConnection()) {
+            return updateStatus(id, status, null, conn);
+        }
     }
 
     public boolean updateStatus(Long id, Booking.BookingStatus status, String cancellationReason, Connection conn) throws SQLException {
@@ -244,30 +267,44 @@ public class BookingDAO extends BaseDAO {
     }
 
     public List<Booking> getTodayArrivals() throws SQLException {
+        return getTodayArrivals(null);
+    }
+
+    public List<Booking> getTodayArrivals(Long hotelId) throws SQLException {
         String sql = getJoinedBookingSql() +
                      "WHERE b.check_in_date = CURDATE() AND b.booking_status = 'CONFIRMED' " +
+                     (hotelId != null ? "AND b.hotel_id = ? " : "") +
                      "ORDER BY b.id ASC";
         List<Booking> list = new ArrayList<>();
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                list.add(mapRow(rs));
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            if (hotelId != null) stmt.setLong(1, hotelId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapRow(rs));
+                }
             }
         }
         return list;
     }
 
     public List<Booking> getTodayDepartures() throws SQLException {
+        return getTodayDepartures(null);
+    }
+
+    public List<Booking> getTodayDepartures(Long hotelId) throws SQLException {
         String sql = getJoinedBookingSql() +
                      "WHERE b.check_out_date = CURDATE() AND b.booking_status = 'CHECKED_IN' " +
+                     (hotelId != null ? "AND b.hotel_id = ? " : "") +
                      "ORDER BY b.id ASC";
         List<Booking> list = new ArrayList<>();
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                list.add(mapRow(rs));
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            if (hotelId != null) stmt.setLong(1, hotelId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapRow(rs));
+                }
             }
         }
         return list;
@@ -288,12 +325,93 @@ public class BookingDAO extends BaseDAO {
     private String getJoinedBookingSql() {
         return "SELECT b.*, " +
                "r.room_number, r.name AS room_name, r.room_type, r.primary_image_url, " +
+               "h.name AS hotel_name, h.city AS hotel_city, h.address AS hotel_address, " +
                "u.email AS customer_email, " +
                "i.payment_status " +
                "FROM bookings b " +
                "JOIN rooms r ON b.room_id = r.id " +
+               "LEFT JOIN hotels h ON b.hotel_id = h.id " +
                "JOIN users u ON b.user_id = u.id " +
                "LEFT JOIN invoices i ON b.id = i.booking_id ";
+    }
+
+    public List<Booking> findByHotelId(Long hotelId, String status, String search) throws SQLException {
+        StringBuilder sql = new StringBuilder(getJoinedBookingSql());
+        sql.append(" WHERE b.hotel_id = ? ");
+
+        List<Object> params = new ArrayList<>();
+        params.add(hotelId);
+
+        if (status != null && !status.trim().isEmpty() && !"ALL".equalsIgnoreCase(status.trim())) {
+            sql.append(" AND b.booking_status = ? ");
+            params.add(status.trim().toUpperCase());
+        }
+
+        if (search != null && !search.trim().isEmpty()) {
+            sql.append(" AND (LOWER(b.booking_reference) LIKE ? OR LOWER(b.guest_name) LIKE ? OR LOWER(b.guest_email) LIKE ?) ");
+            String q = "%" + search.trim().toLowerCase() + "%";
+            params.add(q);
+            params.add(q);
+            params.add(q);
+        }
+
+        sql.append(" ORDER BY b.created_at DESC");
+
+        List<Booking> list = new ArrayList<>();
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+            for (int i = 0; i < params.size(); i++) {
+                stmt.setObject(i + 1, params.get(i));
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapRow(rs));
+                }
+            }
+        }
+        return list;
+    }
+
+    public int countTodayArrivals(Long hotelId) throws SQLException {
+        String sql = hotelId != null
+            ? "SELECT COUNT(*) FROM bookings WHERE hotel_id = ? AND check_in_date = CURDATE() AND booking_status = 'CONFIRMED'"
+            : "SELECT COUNT(*) FROM bookings WHERE check_in_date = CURDATE() AND booking_status = 'CONFIRMED'";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            if (hotelId != null) stmt.setLong(1, hotelId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    public int countTodayDepartures(Long hotelId) throws SQLException {
+        String sql = hotelId != null
+            ? "SELECT COUNT(*) FROM bookings WHERE hotel_id = ? AND check_out_date = CURDATE() AND booking_status = 'CHECKED_IN'"
+            : "SELECT COUNT(*) FROM bookings WHERE check_out_date = CURDATE() AND booking_status = 'CHECKED_IN'";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            if (hotelId != null) stmt.setLong(1, hotelId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    public int countActiveGuests(Long hotelId) throws SQLException {
+        String sql = hotelId != null
+            ? "SELECT COALESCE(SUM(num_guests), 0) FROM bookings WHERE hotel_id = ? AND booking_status = 'CHECKED_IN'"
+            : "SELECT COALESCE(SUM(num_guests), 0) FROM bookings WHERE booking_status = 'CHECKED_IN'";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            if (hotelId != null) stmt.setLong(1, hotelId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        }
+        return 0;
     }
 
     private Booking mapRow(ResultSet rs) throws SQLException {
@@ -301,6 +419,19 @@ public class BookingDAO extends BaseDAO {
         b.setId(rs.getLong("id"));
         b.setBookingReference(rs.getString("booking_reference"));
         b.setUserId(rs.getLong("user_id"));
+        try {
+            b.setHotelId(rs.getLong("hotel_id"));
+        } catch (SQLException ignored) {}
+        try {
+            b.setHotelName(rs.getString("hotel_name"));
+        } catch (SQLException ignored) {}
+        try {
+            b.setHotelCity(rs.getString("hotel_city"));
+        } catch (SQLException ignored) {}
+        try {
+            b.setHotelAddress(rs.getString("hotel_address"));
+        } catch (SQLException ignored) {}
+
         b.setRoomId(rs.getLong("room_id"));
         b.setCheckInDate(rs.getDate("check_in_date").toLocalDate());
         b.setCheckOutDate(rs.getDate("check_out_date").toLocalDate());

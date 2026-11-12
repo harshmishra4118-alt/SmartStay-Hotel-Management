@@ -62,6 +62,9 @@ public class Room implements Serializable {
     }
 
     private Long id;
+    private Long hotelId = 1L;
+    private String hotelName;
+    private String hotelCity;
     private String roomNumber;
     private RoomType roomType;
     private String name;
@@ -89,6 +92,15 @@ public class Room implements Serializable {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
+    public Long getHotelId() { return hotelId; }
+    public void setHotelId(Long hotelId) { this.hotelId = hotelId; }
+
+    public String getHotelName() { return hotelName; }
+    public void setHotelName(String hotelName) { this.hotelName = hotelName; }
+
+    public String getHotelCity() { return hotelCity; }
+    public void setHotelCity(String hotelCity) { this.hotelCity = hotelCity; }
 
     public String getRoomNumber() { return roomNumber; }
     public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }

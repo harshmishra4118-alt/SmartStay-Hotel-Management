@@ -29,6 +29,7 @@ public class Booking implements Serializable {
     private Long id;
     private String bookingReference;
     private Long userId;
+    private Long hotelId = 1L;
     private Long roomId;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
@@ -50,7 +51,10 @@ public class Booking implements Serializable {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // Joined room/payment fields for convenient display in views
+    // Joined room/payment/hotel fields for convenient display in views
+    private String hotelName;
+    private String hotelCity;
+    private String hotelAddress;
     private String roomNumber;
     private String roomName;
     private Room.RoomType roomType;
@@ -77,6 +81,18 @@ public class Booking implements Serializable {
     public Long getUserId() { return userId; }
     public void setUserId(Long userId) { this.userId = userId; }
 
+    public Long getHotelId() { return hotelId; }
+    public void setHotelId(Long hotelId) { this.hotelId = hotelId; }
+
+    public String getHotelName() { return hotelName; }
+    public void setHotelName(String hotelName) { this.hotelName = hotelName; }
+
+    public String getHotelCity() { return hotelCity; }
+    public void setHotelCity(String hotelCity) { this.hotelCity = hotelCity; }
+
+    public String getHotelAddress() { return hotelAddress; }
+    public void setHotelAddress(String hotelAddress) { this.hotelAddress = hotelAddress; }
+
     public Long getRoomId() { return roomId; }
     public void setRoomId(Long roomId) { this.roomId = roomId; }
 
@@ -91,6 +107,10 @@ public class Booking implements Serializable {
 
     public int getNumGuests() { return numGuests; }
     public void setNumGuests(int numGuests) { this.numGuests = numGuests; }
+
+    // Helpers for JSP EL compatibility
+    public int getNumAdults() { return numGuests > 0 ? numGuests : 1; }
+    public int getNumChildren() { return 0; }
 
     public String getGuestName() { return guestName; }
     public void setGuestName(String guestName) { this.guestName = guestName; }

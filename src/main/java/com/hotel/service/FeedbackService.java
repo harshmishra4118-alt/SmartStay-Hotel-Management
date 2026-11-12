@@ -108,6 +108,7 @@ public class FeedbackService {
         Feedback fb = new Feedback();
         fb.setBookingId(bookingId);
         fb.setUserId(userId);
+        fb.setHotelId(booking.getHotelId());
         fb.setRoomId(booking.getRoomId());
         fb.setRating(Math.min(5, Math.max(1, rating)));
         fb.setCleanlinessRating(Math.min(5, Math.max(1, cleanliness)));
@@ -128,6 +129,10 @@ public class FeedbackService {
 
     public List<Feedback> getApprovedReviewsForRoom(Long roomId, int limit) throws SQLException {
         return feedbackDAO.listApprovedForRoom(roomId, limit);
+    }
+
+    public List<Feedback> getApprovedReviewsForHotel(Long hotelId, int limit) throws SQLException {
+        return feedbackDAO.listApprovedForHotel(hotelId, limit);
     }
 
     public List<Feedback> listAllFeedback(Boolean approvedFilter, int offset, int limit) throws SQLException {

@@ -45,7 +45,9 @@ public class UserDAO extends BaseDAO {
             stmt.setLong(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return mapRow(rs);
+                    User user = mapRow(rs);
+                    attachHotelAssignment(user, conn);
+                    return user;
                 }
             }
         }
@@ -60,11 +62,28 @@ public class UserDAO extends BaseDAO {
             stmt.setString(1, email.toLowerCase().trim());
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return mapRow(rs);
+                    User user = mapRow(rs);
+                    attachHotelAssignment(user, conn);
+                    return user;
                 }
             }
         }
         return null;
+    }
+
+    private void attachHotelAssignment(User user, Connection conn) {
+        if (user == null || user.getRole() == User.Role.CUSTOMER) return;
+        String sql = "SELECT hsa.hotel_id, h.name AS hotel_name FROM hotel_staff_assignments hsa " +
+                     "JOIN hotels h ON hsa.hotel_id = h.id WHERE hsa.user_id = ? LIMIT 1";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, user.getId());
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    user.setAssignedHotelId(rs.getLong("hotel_id"));
+                    user.setAssignedHotelName(rs.getString("hotel_name"));
+                }
+            }
+        } catch (SQLException ignored) {}
     }
 
     public boolean updateProfile(Long id, String fullName, String phone) throws SQLException {

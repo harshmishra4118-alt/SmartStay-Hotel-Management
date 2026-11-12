@@ -10,24 +10,25 @@ public class FeedbackDAO extends BaseDAO {
 
     public Long create(Feedback fb) throws SQLException {
         String sql = "INSERT INTO feedback " +
-                     "(booking_id, user_id, room_id, rating, cleanliness_rating, service_rating, amenities_rating, " +
+                     "(booking_id, user_id, hotel_id, room_id, rating, cleanliness_rating, service_rating, amenities_rating, " +
                      "comments, sentiment_label, rule_keywords_matched, is_approved, created_at) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setLong(1, fb.getBookingId());
             stmt.setLong(2, fb.getUserId());
-            stmt.setLong(3, fb.getRoomId());
-            stmt.setInt(4, fb.getRating());
-            stmt.setInt(5, fb.getCleanlinessRating());
-            stmt.setInt(6, fb.getServiceRating());
-            stmt.setInt(7, fb.getAmenitiesRating());
-            stmt.setString(8, fb.getComments());
-            stmt.setString(9, fb.getSentimentLabel().name());
-            stmt.setString(10, fb.getRuleKeywordsMatched());
-            stmt.setBoolean(11, fb.isApproved());
+            stmt.setObject(3, fb.getHotelId() != null ? fb.getHotelId() : 1L);
+            stmt.setLong(4, fb.getRoomId());
+            stmt.setInt(5, fb.getRating());
+            stmt.setInt(6, fb.getCleanlinessRating());
+            stmt.setInt(7, fb.getServiceRating());
+            stmt.setInt(8, fb.getAmenitiesRating());
+            stmt.setString(9, fb.getComments());
+            stmt.setString(10, fb.getSentimentLabel().name());
+            stmt.setString(11, fb.getRuleKeywordsMatched());
+            stmt.setBoolean(12, fb.isApproved());
 
             stmt.executeUpdate();
             try (ResultSet rs = stmt.getGeneratedKeys()) {
@@ -62,6 +63,25 @@ public class FeedbackDAO extends BaseDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, roomId);
             stmt.setInt(2, limit);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapRow(rs));
+                }
+            }
+        }
+        return list;
+    }
+
+    public List<Feedback> listApprovedForHotel(Long hotelId, int limit) throws SQLException {
+        String sql = getJoinedFeedbackSql() +
+                     "WHERE (f.hotel_id = ? OR r.hotel_id = ?) AND f.is_approved = TRUE " +
+                     "ORDER BY f.id DESC LIMIT ?";
+        List<Feedback> list = new ArrayList<>();
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, hotelId);
+            stmt.setLong(2, hotelId);
+            stmt.setInt(3, limit);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     list.add(mapRow(rs));
@@ -154,11 +174,12 @@ public class FeedbackDAO extends BaseDAO {
 
     private String getJoinedFeedbackSql() {
         return "SELECT f.*, u.full_name AS customer_name, u.email AS customer_email, " +
-               "r.name AS room_name, r.room_number, b.booking_reference " +
+               "r.name AS room_name, r.room_number, b.booking_reference, h.name AS hotel_name " +
                "FROM feedback f " +
                "JOIN users u ON f.user_id = u.id " +
                "JOIN rooms r ON f.room_id = r.id " +
-               "JOIN bookings b ON f.booking_id = b.id ";
+               "JOIN bookings b ON f.booking_id = b.id " +
+               "LEFT JOIN hotels h ON (f.hotel_id = h.id OR r.hotel_id = h.id) ";
     }
 
     private Feedback mapRow(ResultSet rs) throws SQLException {
@@ -166,6 +187,7 @@ public class FeedbackDAO extends BaseDAO {
         f.setId(rs.getLong("id"));
         f.setBookingId(rs.getLong("booking_id"));
         f.setUserId(rs.getLong("user_id"));
+        try { f.setHotelId(rs.getLong("hotel_id")); } catch (SQLException ignored) {}
         f.setRoomId(rs.getLong("room_id"));
         f.setRating(rs.getInt("rating"));
         f.setCleanlinessRating(rs.getInt("cleanliness_rating"));
@@ -185,6 +207,7 @@ public class FeedbackDAO extends BaseDAO {
         f.setRoomName(rs.getString("room_name"));
         f.setRoomNumber(rs.getString("room_number"));
         f.setBookingReference(rs.getString("booking_reference"));
+        try { f.setHotelName(rs.getString("hotel_name")); } catch (SQLException ignored) {}
 
         return f;
     }

@@ -53,7 +53,17 @@
             <!-- Filters -->
             <div class="card border-0 shadow-sm rounded-3 mb-4 bg-white p-3">
                 <form action="${pageContext.request.contextPath}/admin/rooms" method="GET" class="row g-2 align-items-center">
-                    <div class="col-md-4">
+                    <c:if test="${sessionScope.currentUser.superAdmin && not empty allHotels}">
+                        <div class="col-md-3">
+                            <select name="hotelId" class="form-select form-select-sm">
+                                <option value="">-- All Hotel Properties --</option>
+                                <c:forEach var="h" items="${allHotels}">
+                                    <option value="${h.id}" ${param.hotelId == h.id ? 'selected' : ''}>${h.name}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </c:if>
+                    <div class="col-md-${sessionScope.currentUser.superAdmin ? '3' : '4'}">
                         <input type="text" name="search" class="form-control form-control-sm" placeholder="Search suite name, room number..." value="${param.search}">
                     </div>
                     <div class="col-md-3">
@@ -64,7 +74,7 @@
                             </c:forEach>
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-${sessionScope.currentUser.superAdmin ? '2' : '3'}">
                         <select name="operational" class="form-select form-select-sm">
                             <option value="">-- Operational Status --</option>
                             <c:forEach var="op" items="${allOperationalStatuses}">
@@ -72,7 +82,7 @@
                             </c:forEach>
                         </select>
                     </div>
-                    <div class="col-md-2 d-flex gap-1">
+                    <div class="col-md-1 d-flex gap-1">
                         <button type="submit" class="btn btn-navy btn-sm w-100 fw-bold">Filter</button>
                         <a href="${pageContext.request.contextPath}/admin/rooms" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-counterclockwise"></i></a>
                     </div>
@@ -107,6 +117,9 @@
                                     <td>
                                         <strong class="text-navy d-block">${r.name}</strong>
                                         <small class="text-muted">Floor ${r.floorNumber} &bull; ${r.sizeSqft} sq.ft.</small>
+                                        <c:if test="${not empty r.hotelName}">
+                                            <div class="small text-primary" style="font-size: 0.75rem;"><i class="bi bi-buildings me-1"></i>${r.hotelName}</div>
+                                        </c:if>
                                     </td>
                                     <td>
                                         <span class="badge bg-light text-navy border">${r.roomType.displayName}</span>

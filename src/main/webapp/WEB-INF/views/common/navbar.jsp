@@ -18,7 +18,22 @@
                     <a class="nav-link" href="${pageContext.request.contextPath}/home">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/rooms">Rooms & Suites</a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/hotels">
+                        <i class="bi bi-geo-alt text-gold me-1"></i>Hotels
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/hotels/nearby">
+                        <i class="bi bi-compass text-gold me-1"></i>Near Me
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/compare">
+                        <i class="bi bi-arrow-left-right text-gold me-1"></i>Compare
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/rooms">Rooms</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/rooms/recommend">
@@ -60,6 +75,7 @@
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/customer/my-bookings"><i class="bi bi-calendar2-check me-2 text-primary"></i>My Bookings</a></li>
+                                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/customer/wishlist"><i class="bi bi-heart me-2 text-danger"></i>My Wishlist</a></li>
                                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/customer/profile"><i class="bi bi-person-badge me-2 text-secondary"></i>Profile & Security</a></li>
                                 
                                 <c:if test="${sessionScope.currentUser.staff || sessionScope.currentUser.admin}">
@@ -70,6 +86,7 @@
 
                                 <c:if test="${sessionScope.currentUser.admin}">
                                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/dashboard"><i class="bi bi-speedometer2 me-2 text-danger"></i>Admin Portal</a></li>
+                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/hotels"><i class="bi bi-buildings me-2 text-gold"></i>Manage Hotels</a></li>
                                 </c:if>
 
                                 <li><hr class="dropdown-divider"></li>
@@ -78,6 +95,9 @@
                         </div>
                     </c:when>
                     <c:otherwise>
+                        <a href="${pageContext.request.contextPath}/otp-login" class="btn btn-outline-gold btn-sm px-2 text-gold" title="Quick Login with Email OTP">
+                            <i class="bi bi-shield-check me-1"></i>OTP Login
+                        </a>
                         <a href="${pageContext.request.contextPath}/login" class="btn btn-outline-light btn-sm px-3">
                             <i class="bi bi-box-arrow-in-right me-1"></i>Sign In
                         </a>
