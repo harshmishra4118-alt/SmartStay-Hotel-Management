@@ -49,17 +49,17 @@
                     <div class="row g-3 mb-3">
                         <div class="col-md-12">
                             <label class="form-label small fw-bold text-uppercase text-secondary">Full Name (as per Photo ID)</label>
-                            <input type="text" name="guestName" class="form-control" required 
+                            <input type="text" name="guestName" class="form-control" required
                                    value="${not empty guestName ? guestName : sessionScope.currentUser.fullName}" placeholder="e.g. Johnathan Doe">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label small fw-bold text-uppercase text-secondary">Email Address</label>
-                            <input type="email" name="guestEmail" class="form-control" required 
+                            <input type="email" name="guestEmail" class="form-control" required
                                    value="${not empty guestEmail ? guestEmail : sessionScope.currentUser.email}" placeholder="guest@example.com">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label small fw-bold text-uppercase text-secondary">Phone Number</label>
-                            <input type="tel" name="guestPhone" class="form-control" required 
+                            <input type="tel" name="guestPhone" class="form-control" required
                                    value="${not empty guestPhone ? guestPhone : sessionScope.currentUser.phone}" placeholder="+91 98765 43210">
                         </div>
                     </div>
@@ -134,7 +134,9 @@
                 <h5 class="font-serif text-navy mb-3">Reservation Summary</h5>
 
                 <div class="rounded-3 overflow-hidden mb-3" style="height: 180px;">
-                    <img src="${room.primaryImageUrl}" alt="${room.name}" class="w-100 h-100 object-fit-cover">
+                    <img src="${not empty room.primaryImageUrl ? room.primaryImageUrl : 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=900&q=80'}"
+                         alt="${room.name}" class="w-100 h-100 object-fit-cover"
+                         onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=900&q=80';">
                 </div>
 
                 <c:if test="${not empty hotel}">
@@ -246,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     feedback.innerHTML = '<span class="text-success fw-bold"><i class="bi bi-check-circle me-1"></i>' + data.message + '</span>';
                     rowDiscount.classList.remove('d-none');
                     calcDiscount.innerText = '-₹' + parseFloat(data.discountAmount).toFixed(2);
-                    
+
                     const discountedBase = Math.max(0, baseAmount - data.discountAmount);
                     const newTax = discountedBase * 0.12;
                     const newTotal = discountedBase + newTax;
